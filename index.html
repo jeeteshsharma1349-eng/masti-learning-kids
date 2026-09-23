@@ -158,78 +158,138 @@ let speechIndex=0;
 let speechActive=false;
 let speechPaused=false;
 let selectedVoice=null;
-function voiceList(){return ("speechSynthesis" in window)?speechSynthesis.getVoices():[]}
+
+function voiceList(){
+  return ('speechSynthesis' in window) ? window.speechSynthesis.getVoices() : [];
+}
+
 function pickVoice(isHindi){
   const voices=voiceList();
-  const lang=isHindi?["hi-IN","hi"]:["en-IN","en-US","en-GB","en"];
-  const exact=voices.filter(v=>lang.includes(v.lang));
-  const same=voices.filter(v=>lang.some(x=>v.lang.toLowerCase().startsWith(x.split("-")[0].toLowerCase())));
-  const pool=exact.length?exact:same;
-  const femaleLike=pool.find(v=>/female|woman|girl|child|kid|google हिन्दी|google hindi|samantha|ava|karen|moira|siri/i.test(v.name));
-  selectedVoice=femaleLike||pool[0]||null;
+  const wanted=isHindi ? ['hi-IN','hi'] : ['en-IN','en-US','en-GB','en'];
+  const exact=voices.filter(v=>wanted.some(x=>v.lang.toLowerCase()===x.toLowerCase()));
+  const same=voices.filter(v=>wanted.some(x=>v.lang.toLowerCase().startsWith(x.split('-')[0].toLowerCase())));
+  const pool=exact.length ? exact : same;
+  // Prefer Google/Indian voices where available; otherwise use the first matching voice.
+  const preferred=pool.find(v=>/google|india|female|woman|girl|child|kid|samantha|ava/i.test(v.name));
+  selectedVoice=preferred || pool[0] || null;
   return selectedVoice;
 }
+
 function splitSpeech(text){
-  const clean=String(text).replace(/\s+/g," ").trim();
+  const clean=String(text).replace(/\s+/g,' ').trim();
   if(!clean)return [];
   const parts=clean.match(/[^.!?।॥]+[.!?।॥]+|[^.!?।॥]+$/g)||[clean];
-  const out=[];
-  let buf="";
+  const out=[]; let buf='';
   parts.forEach(p=>{
     p=p.trim();
-    if((buf+p).length<=180) buf+=(buf?" ":"")+p;
+    if(!p)return;
+    if((buf+' '+p).trim().length<=150) buf=(buf?' '+buf:'') ? (buf+' '+p).trim() : p;
     else {if(buf)out.push(buf);buf=p;}
   });
   if(buf)out.push(buf);
   return out;
 }
+
+function setVoiceStatus(t){
+  const b=document.getElementById('voiceStatus');
+  if(b)b.textContent=t;
+}
+
 function stopVoice(){
-  if("speechSynthesis" in window) speechSynthesis.cancel();
-  speechQueue=[];speechIndex=0;speechActive=false;speechPaused=false;
-  const b=document.getElementById("voiceStatus");if(b)b.textContent="🎙️ Kids Voice ready";
-}
-function pauseVoice(){
-  if(!("speechSynthesis" in window))return;
-  if(speechSynthesis.speaking&&!speechSynthesis.paused){speechSynthesis.pause();speechPaused=true;const b=document.getElementById("voiceStatus");if(b)b.textContent="⏸️ Voice paused";}
-}
-function resumeVoice(){
-  if(!("speechSynthesis" in window))return;
-  if(speechSynthesis.paused){speechSynthesis.resume();speechPaused=false;const b=document.getElementById("voiceStatus");if(b)b.textContent="▶️ Kids Voice playing";}
-}
-function speak(t){
-  if(!soundOn){toast("🔇 Sound OFF — ऊपर Sound ON दबाएँ");return;}
-  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){toast("🔊 इस browser में voice support नहीं है");return;}
-  const text=String(t).trim(); if(!text)return;
-  stopVoice();
-  const isHindi=/[\u0900-\u097F]/.test(text);
-  const chunks=splitSpeech(text);
-  speechQueue=chunks;speechIndex=0;speechActive=true;
-  const v=pickVoice(isHindi);
-  const status=document.getElementById("voiceStatus");
-  if(status)status.textContent=v?"👧 Kids Voice playing":"👧 Kid-style voice playing";
-  function next(){
-    if(!speechActive||speechIndex>=speechQueue.length){speechActive=false;if(status)status.textContent="🎙️ Kids Voice ready";return;}
-    const u=new SpeechSynthesisUtterance(speechQueue[speechIndex]);
-    u.lang=isHindi?"hi-IN":"en-IN";
-    u.rate=isHindi?0.78:0.82;
-    u.pitch=isHindi?1.30:1.24;
-    u.volume=1;
-    if(v)u.voice=v;
-    u.onend=()=>{speechIndex++;setTimeout(next,70)};
-    u.onerror=()=>{speechIndex++;setTimeout(next,70)};
-    try{speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){speechActive=false;toast("🔊 Voice start nahi ho paayi")}
+  if('speechSynthesis' in window){
+    try{window.speechSynthesis.cancel();}catch(e){}
   }
-  setTimeout(next,120);
+  speechQueue=[]; speechIndex=0; speechActive=false; speechPaused=false;
+  setVoiceStatus('🎙️ Kids Voice ready');
 }
+
+function pauseVoice(){
+  if(!('speechSynthesis' in window))return;
+  if(window.speechSynthesis.speaking && !window.speechSynthesis.paused){
+    window.speechSynthesis.pause(); speechPaused=true; setVoiceStatus('⏸️ Voice paused');
+  }
+}
+
+function resumeVoice(){
+  if(!('speechSynthesis' in window))return;
+  if(window.speechSynthesis.paused){
+    window.speechSynthesis.resume(); speechPaused=false; setVoiceStatus('▶️ Kids Voice playing');
+  }else if(speechActive){
+    // Some Android Chrome versions cancel a queued utterance after the page resumes.
+    speakQueueNow();
+  }
+}
+
+function speakQueueNow(){
+  if(!speechActive || speechIndex>=speechQueue.length){
+    speechActive=false; speechPaused=false; setVoiceStatus('🎙️ Kids Voice ready'); return;
+  }
+  const text=speechQueue[speechIndex];
+  const isHindi=/[\u0900-\u097F]/.test(text);
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=isHindi?'hi-IN':'en-IN';
+  u.rate=isHindi?0.76:0.80;
+  u.pitch=isHindi?1.28:1.22;
+  u.volume=1;
+  const v=pickVoice(isHindi);
+  if(v)u.voice=v;
+  u.onend=function(){
+    if(!speechActive)return;
+    speechIndex++;
+    if(speechIndex<speechQueue.length){
+      setTimeout(speakQueueNow,120);
+    }else{
+      speechActive=false; speechPaused=false; setVoiceStatus('🎙️ Kids Voice ready');
+    }
+  };
+  u.onerror=function(){
+    // Try the same text once with the browser's default voice.
+    if(u.__retry){
+      speechIndex++;
+      setTimeout(speakQueueNow,120);
+    }else{
+      u.__retry=true;
+      setTimeout(function(){
+        const retry=new SpeechSynthesisUtterance(text);
+        retry.lang=isHindi?'hi-IN':'en-IN'; retry.rate=isHindi?0.76:0.80; retry.pitch=isHindi?1.28:1.22; retry.volume=1;
+        retry.onend=u.onend; retry.onerror=function(){speechIndex++;setTimeout(speakQueueNow,120)};
+        try{window.speechSynthesis.speak(retry);}catch(e){speechIndex++;setTimeout(speakQueueNow,120)}
+      },120);
+    }
+  };
+  try{
+    // IMPORTANT: speak is called immediately for the first chunk from the button tap.
+    window.speechSynthesis.speak(u);
+  }catch(e){
+    speechActive=false; setVoiceStatus('⚠️ Voice start failed'); toast('🔊 Voice start nahi ho paayi — phone ka Media volume check karein');
+  }
+}
+
+function speak(t){
+  if(!soundOn){toast('🔇 Sound OFF — ऊपर Sound ON दबाएँ');return;}
+  if(!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)){
+    toast('🔊 इस browser में voice support नहीं है'); return;
+  }
+  const text=String(t||'').trim();
+  if(!text)return;
+
+  // Cancel only after the new button tap, then speak the FIRST chunk immediately.
+  try{window.speechSynthesis.cancel();}catch(e){}
+  speechQueue=splitSpeech(text);
+  speechIndex=0; speechActive=true; speechPaused=false;
+  setVoiceStatus('👧 Kids Voice playing');
+  speakQueueNow();
+}
+
 function warmVoice(){
-  if(!window.speechSynthesis)return;
-  try{speechSynthesis.cancel();speechSynthesis.resume();speechSynthesis.getVoices();}catch(e){}
+  if(!('speechSynthesis' in window))return;
+  try{window.speechSynthesis.getVoices();}catch(e){}
 }
-if("speechSynthesis" in window){
-  speechSynthesis.getVoices();
-  speechSynthesis.onvoiceschanged=()=>{speechSynthesis.getVoices();};
-  window.addEventListener("pageshow",warmVoice);
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&speechActive&&!speechPaused)try{speechSynthesis.resume()}catch(e){}});
+
+if('speechSynthesis' in window){
+  warmVoice();
+  window.speechSynthesis.onvoiceschanged=warmVoice;
+  window.addEventListener('pageshow',warmVoice);
 }
 function renderABC(){document.getElementById("abcL").textContent=A[ai][0];document.getElementById("abcW").textContent=A[ai][1];document.getElementById("abcP").innerHTML=A.map((x,i)=>`<button class="pill ${i===ai?"active":""}" onclick="setABC(${i})">${x[0]}</button>`).join("")}
 function setABC(i){ai=i;renderABC();tone(600,.06)}
