@@ -1,662 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#6C63FF">
-  <title>Masti Learning Kids</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f5f7ff;
-      color: #222;
-      min-height: 100vh;
-    }
-
-    .app {
-      max-width: 600px;
-      margin: auto;
-      min-height: 100vh;
-      background: #ffffff;
-    }
-
-    /* HEADER */
-    header {
-      background: linear-gradient(135deg, #6c63ff, #8f7cff);
-      color: white;
-      padding: 25px 20px;
-      border-radius: 0 0 30px 30px;
-    }
-
-    .top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .welcome {
-      font-size: 15px;
-      opacity: 0.9;
-    }
-
-    h1 {
-      font-size: 27px;
-      margin-top: 5px;
-    }
-
-    .stars {
-      background: rgba(255,255,255,0.2);
-      padding: 10px 14px;
-      border-radius: 20px;
-      font-weight: bold;
-    }
-
-    /* CONTENT */
-    main {
-      padding: 20px;
-    }
-
-    .section-title {
-      font-size: 21px;
-      margin: 20px 0 12px;
-    }
-
-    /* FEATURE CARD */
-    .daily {
-      background: linear-gradient(135deg, #ffcf5c, #ff9f43);
-      color: white;
-      padding: 20px;
-      border-radius: 22px;
-      margin-bottom: 20px;
-      box-shadow: 0 8px 20px rgba(255,159,67,0.25);
-    }
-
-    .daily h2 {
-      margin-bottom: 8px;
-    }
-
-    .daily button {
-      margin-top: 12px;
-      background: white;
-      color: #ff8c00;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 20px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    /* GRID */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .card {
-      border: none;
-      padding: 20px 12px;
-      border-radius: 22px;
-      background: #f2f3ff;
-      text-align: center;
-      cursor: pointer;
-      transition: 0.2s;
-      box-shadow: 0 5px 12px rgba(0,0,0,0.06);
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-    }
-
-    .icon {
-      font-size: 38px;
-      margin-bottom: 8px;
-    }
-
-    .card h3 {
-      font-size: 17px;
-    }
-
-    .card p {
-      font-size: 12px;
-      color: #777;
-      margin-top: 5px;
-    }
-
-    /* SCREEN */
-    .screen {
-      display: none;
-    }
-
-    .screen.active {
-      display: block;
-    }
-
-    .back {
-      border: none;
-      background: #eeeeff;
-      padding: 10px 15px;
-      border-radius: 15px;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
-
-    /* LEARN */
-    .lesson {
-      background: #f7f7ff;
-      padding: 25px;
-      border-radius: 25px;
-      text-align: center;
-      margin-bottom: 15px;
-    }
-
-    .big-letter {
-      font-size: 90px;
-      font-weight: bold;
-      color: #6c63ff;
-    }
-
-    .lesson button,
-    .quiz-option {
-      border: none;
-      background: #6c63ff;
-      color: white;
-      padding: 13px;
-      border-radius: 15px;
-      margin-top: 12px;
-      width: 100%;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    /* QUIZ */
-    .question {
-      background: #f3f4ff;
-      padding: 20px;
-      border-radius: 20px;
-      font-size: 20px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-
-    /* GAME */
-    .game-box {
-      text-align: center;
-      background: #f7f7ff;
-      padding: 30px 20px;
-      border-radius: 25px;
-    }
-
-    .number {
-      font-size: 60px;
-      color: #6c63ff;
-      font-weight: bold;
-    }
-
-    .game-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 20px;
-    }
-
-    .game-buttons button {
-      padding: 18px;
-      border: none;
-      border-radius: 15px;
-      background: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    /* REWARDS */
-    .reward {
-      background: #fff7d6;
-      padding: 20px;
-      border-radius: 20px;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .reward-icon {
-      font-size: 45px;
-    }
-
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: sticky;
-      bottom: 0;
-      background: white;
-      border-top: 1px solid #eee;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      padding: 10px 5px;
-    }
-
-    .bottom-nav button {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      font-size: 12px;
-      color: #555;
-    }
-
-    .bottom-nav span {
-      display: block;
-      font-size: 23px;
-      margin-bottom: 3px;
-    }
-
-    .message {
-      text-align: center;
-      margin-top: 15px;
-      font-weight: bold;
-      min-height: 25px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6C63FF">
+<title>Masti Learning Kids V2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--primary:#6c63ff;--primary2:#8b7cff;--bg:#f7f8ff;--card:#fff;--text:#202238;--muted:#74778b;--green:#2bb673;--orange:#ffab45;--pink:#ff6fae}
+body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
+button{font:inherit}
+.app{max-width:650px;margin:auto;min-height:100vh;background:var(--bg);padding-bottom:76px}
+header{background:linear-gradient(135deg,#6558f5,#9a7cff);color:#fff;padding:25px 20px 28px;border-radius:0 0 32px 32px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.welcome{font-size:15px;opacity:.92}
+h1{font-size:28px;margin-top:5px}.stars{background:#ffffff25;padding:11px 15px;border-radius:22px;font-weight:700;white-space:nowrap}
+main{padding:18px}.section-title{font-size:21px;margin:19px 0 12px}
+.daily{background:linear-gradient(135deg,#ffd45e,#ff9e42);color:#fff;padding:20px;border-radius:24px;box-shadow:0 10px 25px #ffae4730}
+.daily h2{margin-bottom:7px}.daily p{line-height:1.45}.daily button,.primary{border:0;background:#fff;color:#e88918;padding:12px 18px;border-radius:22px;font-weight:700;margin-top:13px;cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.card{border:0;padding:19px 10px;border-radius:23px;background:#fff;text-align:center;cursor:pointer;box-shadow:0 7px 18px #4d50a40c;min-height:150px}
+.card:active,.option:active,.game-card:active{transform:scale(.98)}
+.icon{font-size:40px;margin-bottom:8px}.card h3{font-size:17px}.card p{font-size:12px;color:var(--muted);margin-top:5px}
+.screen{display:none}.screen.active{display:block}.back{border:0;background:#ececff;padding:10px 14px;border-radius:15px;cursor:pointer;margin-bottom:12px}
+.panel{background:#fff;border-radius:24px;padding:20px;box-shadow:0 8px 22px #4d50a40d;margin-bottom:14px}
+.hero{text-align:center;background:linear-gradient(135deg,#eef0ff,#fff)}
+.big{font-size:88px;font-weight:800;color:var(--primary);line-height:1.1}.word{font-size:25px;font-weight:800}.sub{color:var(--muted);margin-top:7px}
+.row{display:flex;gap:10px;overflow:auto;padding-bottom:5px}.pill{border:0;background:#f0f1ff;padding:10px 15px;border-radius:20px;white-space:nowrap;cursor:pointer}.pill.active{background:var(--primary);color:#fff}
+.option{width:100%;border:0;background:#f0f1ff;padding:15px;border-radius:17px;margin-top:10px;text-align:left;cursor:pointer;font-weight:700}
+.option.correct{background:#dff8eb;color:#14794b}.option.wrong{background:#ffe4ea;color:#a52b4b}
+.feedback{text-align:center;min-height:28px;margin-top:13px;font-weight:800}
+.score{text-align:center;font-size:18px;margin-bottom:12px}
+.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.game-card{border:0;border-radius:20px;background:#f0f1ff;padding:22px 10px;cursor:pointer;text-align:center}.game-card div{font-size:38px;margin-bottom:7px}
+.memory{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.memory button{height:65px;border:0;border-radius:14px;background:#ececff;font-size:25px;cursor:pointer}.memory button.open{background:#fff3cf}
+.color-box{height:125px;border-radius:24px;margin:14px 0;background:#ff4f70;display:flex;align-items:center;justify-content:center;color:#fff;font-size:23px;font-weight:800}
+.color-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.color-options button{height:55px;border:0;border-radius:15px;cursor:pointer}
+.reward{display:flex;align-items:center;gap:15px;background:#fff;padding:16px;border-radius:20px;margin-bottom:10px}.badge{font-size:42px}.locked{opacity:.45}
+.progressbar{height:14px;background:#ececff;border-radius:20px;overflow:hidden;margin-top:10px}.progressfill{height:100%;background:linear-gradient(90deg,#6c63ff,#a38cff);width:0}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#fff;padding:16px 8px;border-radius:18px;text-align:center}.stat b{display:block;font-size:23px}.stat span{font-size:11px;color:var(--muted)}
+.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(650px,100%);background:#fff;border-top:1px solid #e7e7ee;display:grid;grid-template-columns:repeat(4,1fr);padding:9px 5px calc(9px + env(safe-area-inset-bottom));z-index:20}.bottom-nav button{border:0;background:transparent;color:#626579;cursor:pointer;font-size:12px}.bottom-nav span{display:block;font-size:22px;margin-bottom:2px}.bottom-nav button.active{color:var(--primary);font-weight:800}
+.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);background:#202238;color:#fff;padding:12px 18px;border-radius:25px;opacity:0;pointer-events:none;transition:.25s;z-index:30;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}.confetti i{position:absolute;width:8px;height:14px;animation:fall 900ms ease-out forwards}@keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
+@media(max-width:380px){h1{font-size:24px}.grid{gap:10px}.card{min-height:140px}.big{font-size:75px}}
+</style>
 </head>
-
 <body>
-
 <div class="app">
 
-  <!-- HOME -->
-  <section id="home" class="screen active">
-
-    <header>
-      <div class="top">
-        <div>
-          <div class="welcome">👋 Welcome Champ!</div>
-          <h1>Masti Learning 🎓</h1>
-        </div>
-
-        <div class="stars">
-          ⭐ <span id="starCount">0</span>
-        </div>
-      </div>
-    </header>
-
-    <main>
-
-      <div class="daily">
-        <h2>🌟 Daily Challenge</h2>
-        <p>Complete today's challenge and earn stars!</p>
-        <button onclick="showScreen('quiz')">Start Challenge 🚀</button>
-      </div>
-
-      <h2 class="section-title">📚 Learn & Play</h2>
-
-      <div class="grid">
-
-        <button class="card" onclick="showScreen('abc')">
-          <div class="icon">🔤</div>
-          <h3>ABC Learning</h3>
-          <p>Learn English</p>
-        </button>
-
-        <button class="card" onclick="showScreen('math')">
-          <div class="icon">🔢</div>
-          <h3>Maths Fun</h3>
-          <p>Learn numbers</p>
-        </button>
-
-        <button class="card" onclick="showScreen('quiz')">
-          <div class="icon">🧠</div>
-          <h3>Quiz Time</h3>
-          <p>Test your brain</p>
-        </button>
-
-        <button class="card" onclick="showScreen('games')">
-          <div class="icon">🎮</div>
-          <h3>Mini Games</h3>
-          <p>Play & learn</p>
-        </button>
-
-        <button class="card" onclick="showScreen('rewards')">
-          <div class="icon">🏆</div>
-          <h3>My Rewards</h3>
-          <p>See your badges</p>
-        </button>
-
-        <button class="card" onclick="showScreen('progress')">
-          <div class="icon">📊</div>
-          <h3>My Progress</h3>
-          <p>Track learning</p>
-        </button>
-
-      </div>
-
-    </main>
-  </section>
-
-
-  <!-- ABC -->
-  <section id="abc" class="screen">
-
-    <main>
-      <button class="back" onclick="showScreen('home')">← Home</button>
-
-      <h2 class="section-title">🔤 ABC Learning</h2>
-
-      <div class="lesson">
-        <div class="big-letter" id="letter">A</div>
-
-        <h2 id="word">🍎 Apple</h2>
-
-        <p style="margin-top:10px;">
-          A for Apple
-        </p>
-
-        <button onclick="nextLetter()">
-          Next Letter ➡️
-        </button>
-
-        <div class="message" id="abcMessage"></div>
-      </div>
-
-    </main>
-  </section>
-
-
-  <!-- MATH -->
-  <section id="math" class="screen">
-
-    <main>
-
-      <button class="back" onclick="showScreen('home')">← Home</button>
-
-      <h2 class="section-title">🔢 Maths Fun</h2>
-
-      <div class="question">
-        What is <b>5 + 3</b>?
-      </div>
-
-      <button class="quiz-option" onclick="mathAnswer(6)">6</button>
-      <button class="quiz-option" onclick="mathAnswer(8)">8</button>
-      <button class="quiz-option" onclick="mathAnswer(9)">9</button>
-
-      <div class="message" id="mathMessage"></div>
-
-    </main>
-  </section>
-
-
-  <!-- QUIZ -->
-  <section id="quiz" class="screen">
-
-    <main>
-
-      <button class="back" onclick="showScreen('home')">← Home</button>
-
-      <h2 class="section-title">🧠 Quiz Time</h2>
-
-      <div class="question">
-        🇮🇳 What is the capital of India?
-      </div>
-
-      <button class="quiz-option" onclick="quizAnswer(false)">Mumbai</button>
-      <button class="quiz-option" onclick="quizAnswer(true)">New Delhi</button>
-      <button class="quiz-option" onclick="quizAnswer(false)">Kolkata</button>
-      <button class="quiz-option" onclick="quizAnswer(false)">Chennai</button>
-
-      <div class="message" id="quizMessage"></div>
-
-    </main>
-  </section>
-
-
-  <!-- GAMES -->
-  <section id="games" class="screen">
-
-    <main>
-
-      <button class="back" onclick="showScreen('home')">← Home</button>
-
-      <h2 class="section-title">🎮 Number Game</h2>
-
-      <div class="game-box">
-
-        <p>Find the correct number!</p>
-
-        <div class="number">7</div>
-
-        <div class="game-buttons">
-          <button onclick="gameAnswer(false)">4</button>
-          <button onclick="gameAnswer(true)">7</button>
-          <button onclick="gameAnswer(false)">9</button>
-          <button onclick="gameAnswer(false)">3</button>
-        </div>
-
-        <div class="message" id="gameMessage"></div>
-
-      </div>
-
-    </main>
-  </section>
-
-
-  <!-- REWARDS -->
-  <section id="rewards" class="screen">
-
-    <main>
-
-      <button class="back" onclick="showScreen('home')">← Home</button>
-
-      <h2 class="section-title">🏆 My Rewards</h2>
-
-      <div class="reward">
-        <div class="reward-icon">🥉</div>
-        <h3>Bronze Learner</h3>
-        <p>Earn 100 Stars</p>
-      </div>
-
-      <div class="reward">
-        <div class="reward-icon">🥈</div>
-        <h3>Smart Learner</h3>
-        <p>Earn 500 Stars</p>
-      </div>
-
-      <div class="reward">
-        <div class="reward-icon">🥇</div>
-        <h3>Super Champ</h3>
-        <p>Earn 1000 Stars</p>
-      </div>
-
-    </main>
-  </section>
-
-
-  <!-- PROGRESS -->
-  <section id="progress" class="screen">
-
-    <main>
-
-      <button class="back" onclick="showScreen('home')">← Home</button>
-
-      <h2 class="section-title">📊 My Progress</h2>
-
-      <div class="lesson">
-        <h2>⭐ Stars</h2>
-        <div style="font-size:40px;margin:10px;" id="progressStars">0</div>
-        <p>Keep learning and earn more!</p>
-      </div>
-
-      <div class="lesson">
-        <h2>🔥 Daily Streak</h2>
-        <div style="font-size:40px;margin:10px;">1 Day</div>
-        <p>Come back tomorrow!</p>
-      </div>
-
-    </main>
-  </section>
-
-
-  <!-- BOTTOM NAV -->
-
-  <nav class="bottom-nav">
-
-    <button onclick="showScreen('home')">
-      <span>🏠</span>
-      Home
-    </button>
-
-    <button onclick="showScreen('abc')">
-      <span>📚</span>
-      Learn
-    </button>
-
-    <button onclick="showScreen('games')">
-      <span>🎮</span>
-      Games
-    </button>
-
-    <button onclick="showScreen('rewards')">
-      <span>🏆</span>
-      Rewards
-    </button>
-
-  </nav>
-
+<header>
+  <div class="top">
+    <div><div class="welcome">👋 Welcome Champ!</div><h1>Masti Learning 🎓</h1></div>
+    <div class="stars">⭐ <span id="stars">0</span></div>
+  </div>
+</header>
+
+<section id="home" class="screen active">
+<main>
+  <div class="daily">
+    <h2>🌟 Daily Challenge</h2>
+    <p>Learn something new, play a game and collect stars!</p>
+    <button onclick="go('quiz')">Start Challenge 🚀</button>
+  </div>
+  <h2 class="section-title">📚 Learn & Play</h2>
+  <div class="grid">
+    <button class="card" onclick="go('abc')"><div class="icon">🔤</div><h3>ABC Learning</h3><p>Letters, words & sounds</p></button>
+    <button class="card" onclick="go('math')"><div class="icon">🔢</div><h3>Maths Fun</h3><p>Add, subtract & count</p></button>
+    <button class="card" onclick="go('hindi')"><div class="icon">🇮🇳</div><h3>Hindi सीखो</h3><p>अ से अनार तक</p></button>
+    <button class="card" onclick="go('quiz')"><div class="icon">🧠</div><h3>Quiz Time</h3><p>Test your brain</p></button>
+    <button class="card" onclick="go('games')"><div class="icon">🎮</div><h3>Mini Games</h3><p>Play & learn</p></button>
+    <button class="card" onclick="go('rewards')"><div class="icon">🏆</div><h3>My Rewards</h3><p>Collect badges</p></button>
+    <button class="card" onclick="go('progress')"><div class="icon">📊</div><h3>My Progress</h3><p>See your learning</p></button>
+  </div>
+</main>
+</section>
+
+<section id="abc" class="screen"><main>
+<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🔤 ABC Learning</h2>
+<div class="panel hero"><div class="big" id="abcLetter">A</div><div class="word" id="abcWord">🍎 Apple</div><div class="sub">Tap the button to hear the word.</div>
+<button class="primary" onclick="speakABC()">🔊 Hear it</button>
+<button class="primary" onclick="nextABC()">Next Letter ➡️</button><div class="feedback" id="abcFeedback"></div></div>
+<div class="row" id="abcPills"></div>
+</main></section>
+
+<section id="hindi" class="screen"><main>
+<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🇮🇳 Hindi सीखो</h2>
+<div class="panel hero"><div class="big" id="hiLetter">अ</div><div class="word" id="hiWord">🍎 अनार</div><div class="sub">अक्षर बोलकर भी सुनो 🔊</div>
+<button class="primary" onclick="speakHindi()">🔊 सुनो</button><button class="primary" onclick="nextHindi()">अगला ➡️</button><div class="feedback" id="hiFeedback"></div></div>
+<div class="row" id="hiPills"></div>
+</main></section>
+
+<section id="math" class="screen"><main>
+<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🔢 Maths Fun</h2>
+<div class="panel"><div class="score">⭐ Stars: <b id="mathScore">0</b></div><div class="question" id="mathQuestion" style="font-size:26px;font-weight:800;text-align:center;padding:15px">5 + 3 = ?</div><div id="mathOptions"></div><div class="feedback" id="mathFeedback"></div></div>
+</main></section>
+
+<section id="quiz" class="screen"><main>
+<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🧠 Quiz Time</h2>
+<div class="panel"><div class="score">Question <b id="qNum">1</b>/5 · ⭐ <b id="qScore">0</b></div><div class="question" id="question" style="font-size:21px;font-weight:800;text-align:center;padding:12px"></div><div id="quizOptions"></div><div class="feedback" id="quizFeedback"></div></div>
+</main></section>
+
+<section id="games" class="screen"><main>
+<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🎮 Mini Games</h2>
+<div class="game-grid">
+<button class="game-card" onclick="startMemory()"><div>🧩</div><b>Memory Match</b><small>Find pairs</small></button>
+<button class="game-card" onclick="startNumberGame()"><div>🔢</div><b>Number Hunt</b><small>Find the number</small></button>
+<button class="game-card" onclick="startColorGame()"><div>🎨</div><b>Color Game</b><small>Pick the color</small></button>
+<button class="game-card" onclick="go('quiz')"><div>🧠</div><b>Quick Quiz</b><small>Learn & score</small></button>
 </div>
+<div id="gameArea" style="margin-top:15px"></div>
+</main></section>
 
+<section id="rewards" class="screen"><main>
+<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🏆 My Rewards</h2>
+<div class="reward" id="bronze"><div class="badge">🥉</div><div><b>Bronze Learner</b><p>100 Stars</p></div></div>
+<div class="reward" id="silver"><div class="badge">🥈</div><div><b>Smart Learner</b><p>500 Stars</p></div></div>
+<div class="reward" id="gold"><div class="badge">🥇</div><div><b>Super Champ</b><p>1000 Stars</p></div></div>
+<div class="reward" id="crown"><div class="badge">👑</div><div><b>Learning King/Queen</b><p>2500 Stars</p></div></div>
+</main></section>
+
+<section id="progress" class="screen"><main>
+<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">📊 My Progress</h2>
+<div class="stat-grid"><div class="stat"><b id="pStars">0</b><span>Stars</span></div><div class="stat"><b id="pCorrect">0</b><span>Correct</span></div><div class="stat"><b id="pGames">0</b><span>Games</span></div></div>
+<div class="panel" style="margin-top:14px"><b>⭐ Level Progress</b><div class="progressbar"><div class="progressfill" id="levelFill"></div></div><p class="sub" id="levelText">Level 1 · Keep learning!</p></div>
+<div class="panel"><b>🔥 Daily Streak</b><h2 style="margin-top:8px">1 Day</h2><p class="sub">Come back tomorrow for another challenge.</p></div>
+</main></section>
+
+<nav class="bottom-nav">
+<button onclick="go('home')" data-nav="home" class="active"><span>🏠</span>Home</button>
+<button onclick="go('abc')" data-nav="abc"><span>📚</span>Learn</button>
+<button onclick="go('games')" data-nav="games"><span>🎮</span>Games</button>
+<button onclick="go('rewards')" data-nav="rewards"><span>🏆</span>Rewards</button>
+</nav>
+</div>
+<div class="toast" id="toast"></div><div class="confetti" id="confetti"></div>
 
 <script>
+const A=[
+["A","🍎 Apple"],["B","⚽ Ball"],["C","🐱 Cat"],["D","🐶 Dog"],["E","🥚 Egg"],["F","🐟 Fish"],["G","🍇 Grapes"],["H","🏠 House"],["I","🍦 Ice Cream"],["J","🧃 Juice"],["K","🪁 Kite"],["L","🦁 Lion"],["M","🐒 Monkey"],["N","👃 Nose"],["O","🍊 Orange"],["P","🐼 Panda"],["Q","👑 Queen"],["R","🌈 Rainbow"],["S","☀️ Sun"],["T","🐯 Tiger"],["U","☂️ Umbrella"],["V","🎻 Violin"],["W","🐳 Whale"],["X","🎵 Xylophone"],["Y","🧶 Yarn"],["Z","🦓 Zebra"]
+];
+const H=[["अ","🍎 अनार"],["आ","🥭 आम"],["इ","🍋 इमली"],["ई","🦅 ईगल"],["उ","🦉 उल्लू"],["ऊ","🐪 ऊँट"],["ए","🚂 इंजन"],["ऐ","🪞 ऐनक"],["ओ","🦜 ओखली"],["औ","💊 औषधि"],["क","🐦 कबूतर"],["ख","🐰 खरगोश"],["ग","🌼 गमला"],["घ","🏠 घर"]];
+let stars=Number(localStorage.getItem("mlStars")||0), correct=Number(localStorage.getItem("mlCorrect")||0), games=Number(localStorage.getItem("mlGames")||0);
+let ai=0,hi=0,mathScore=0,qIndex=0,qScore=0;
 
-  /* STAR SYSTEM */
+function save(){localStorage.setItem("mlStars",stars);localStorage.setItem("mlCorrect",correct);localStorage.setItem("mlGames",games);updateUI()}
+function updateUI(){
+document.getElementById("stars").textContent=stars;document.getElementById("pStars").textContent=stars;document.getElementById("pCorrect").textContent=correct;document.getElementById("pGames").textContent=games;
+let level=Math.floor(stars/100)+1;let pct=stars%100;document.getElementById("levelFill").style.width=pct+"%";document.getElementById("levelText").textContent=`Level ${level} · ${100-pct} stars to next level`;
+["bronze","silver","gold","crown"].forEach((id,i)=>document.getElementById(id).classList.toggle("locked",stars<[100,500,1000,2500][i]));
+}
+function addStars(n,msg=""){stars+=n;correct++;save();if(msg) toast(msg);if(n>=15) celebrate()}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1500)}
+function celebrate(){let c=document.getElementById("confetti");c.innerHTML="";for(let i=0;i<28;i++){let s=document.createElement("i");s.style.left=Math.random()*100+"%";s.style.top="-20px";s.style.animationDelay=Math.random()*250+"ms";s.style.background=`hsl(${Math.random()*360},85%,60%)`;c.appendChild(s)}setTimeout(()=>c.innerHTML="",1100)}
+function go(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.nav===id));window.scrollTo(0,0);if(id==="rewards"||id==="progress")updateUI()}
+function speak(t){if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}
+function renderPills(){
+document.getElementById("abcPills").innerHTML=A.map((x,i)=>`<button class="pill ${i===0?"active":""}" onclick="setABC(${i})">${x[0]}</button>`).join("");
+document.getElementById("hiPills").innerHTML=H.map((x,i)=>`<button class="pill ${i===0?"active":""}" onclick="setHI(${i})">${x[0]}</button>`).join("");
+}
+function setABC(i){ai=i;document.getElementById("abcLetter").textContent=A[i][0];document.getElementById("abcWord").textContent=A[i][1];document.querySelectorAll("#abcPills .pill").forEach((b,j)=>b.classList.toggle("active",i===j));document.getElementById("abcFeedback").textContent=""}
+function nextABC(){ai=(ai+1)%A.length;setABC(ai);addStars(5,"🎉 +5 Stars")}
+function speakABC(){speak(A[ai][0]+" for "+A[ai][1].replace(/[^\w ]/g,""))}
+function setHI(i){hi=i;document.getElementById("hiLetter").textContent=H[i][0];document.getElementById("hiWord").textContent=H[i][1];document.querySelectorAll("#hiPills .pill").forEach((b,j)=>b.classList.toggle("active",i===j))}
+function nextHindi(){hi=(hi+1)%H.length;setHI(hi);addStars(5,"🎉 +5 Stars")}
+function speakHindi(){speak(H[hi][0]+" से "+H[hi][1].replace(/[^\u0900-\u097F ]/g,""))}
 
-  let stars = 0;
+function newMath(){
+let a=Math.floor(Math.random()*10)+1,b=Math.floor(Math.random()*10)+1,ans=a+b;
+document.getElementById("mathQuestion").textContent=`${a} + ${b} = ?`;
+let opts=[ans,ans+1,Math.max(0,ans-2),ans+3].sort(()=>Math.random()-.5);
+document.getElementById("mathOptions").innerHTML=opts.map(o=>`<button class="option" onclick="mathAnswer(${o},${ans})">${o}</button>`).join("");document.getElementById("mathFeedback").textContent="";
+}
+function mathAnswer(o,a){if(o===a){mathScore+=10;addStars(10,"🎉 Correct! +10 Stars");document.getElementById("mathScore").textContent=mathScore;document.getElementById("mathFeedback").textContent="🌟 Great job!";setTimeout(newMath,650)}else document.getElementById("mathFeedback").textContent="😊 Try again!"}
 
-  function addStars(amount) {
+const Q=[
+["Which animal says 'meow'?","🐱 Cat",["🐶 Dog","🐱 Cat","🐮 Cow","🐔 Hen"]],
+["What comes after 4?","5",["3","5","7","9"]],
+["How many days are in a week?","7",["5","6","7","10"]],
+["Which one is a fruit?","🍎 Apple",["🚗 Car","🍎 Apple","🏠 House","✏️ Pencil"]],
+["What color is the sky on a clear day?","Blue",["Green","Blue","Pink","Black"]],
+["2 + 3 = ?","5",["4","5","6","8"]],
+["Which is the largest?","Elephant",["Cat","Dog","Elephant","Mouse"]]
+];
+function startQuiz(){qIndex=0;qScore=0;renderQuiz()}
+function renderQuiz(){let q=Q[qIndex%Q.length];document.getElementById("qNum").textContent=Math.min(qIndex+1,5);document.getElementById("qScore").textContent=qScore;document.getElementById("question").textContent=q[0];document.getElementById("quizOptions").innerHTML=q[2].map(o=>`<button class="option" onclick='quizAnswer(${JSON.stringify(o)},${JSON.stringify(q[1])})'>${o}</button>`).join("");document.getElementById("quizFeedback").textContent=""}
+function quizAnswer(o,a){if(o===a){qScore+=20;addStars(20,"🎉 Correct! +20 Stars");document.getElementById("quizFeedback").textContent="⭐ Excellent!";}else document.getElementById("quizFeedback").textContent="😊 Nice try!";setTimeout(()=>{qIndex++;if(qIndex>=5){toast(`🏆 Quiz complete! Score ${qScore}`);qIndex=0;qScore=0}renderQuiz()},700)}
 
-    stars += amount;
+let mem=[];
+function startMemory(){games++;save();let vals=["🍎","🍎","🐱","🐱","🚗","🚗","⭐","⭐"].sort(()=>Math.random()-.5);mem=vals.map((v,i)=>({v,open:false,done:false}));document.getElementById("gameArea").innerHTML=`<div class="panel"><h3 style="margin-bottom:12px">🧩 Match the pairs</h3><div class="memory">${mem.map((_,i)=>`<button id="m${i}" onclick="flip(${i})">❓</button>`).join("")}</div><div class="feedback" id="memMsg"></div></div>`}
+let first=-1,busy=false;
+function flip(i){if(busy||mem[i].open||mem[i].done)return;mem[i].open=true;document.getElementById("m"+i).textContent=mem[i].v;document.getElementById("m"+i).classList.add("open");if(first<0){first=i;return}busy=true;if(mem[first].v===mem[i].v){mem[first].done=mem[i].done=true;addStars(15,"🎉 Pair found! +15");first=-1;busy=false;if(mem.every(x=>x.done))document.getElementById("memMsg").textContent="🏆 You found all pairs!"}else{setTimeout(()=>{[first,i].forEach(j=>{mem[j].open=false;document.getElementById("m"+j).textContent="❓";document.getElementById("m"+j).classList.remove("open")});first=-1;busy=false},650)}}
+function startNumberGame(){games++;save();let target=Math.floor(Math.random()*9)+1,opts=[target];while(opts.length<4){let n=Math.floor(Math.random()*9)+1;if(!opts.includes(n))opts.push(n)}opts.sort(()=>Math.random()-.5);document.getElementById("gameArea").innerHTML=`<div class="panel" style="text-align:center"><h3>🔢 Find number ${target}</h3><div class="game-grid" style="margin-top:15px">${opts.map(n=>`<button class="game-card" onclick="numberAnswer(${n},${target})"><div>${n}</div></button>`).join("")}</div><div class="feedback" id="numMsg"></div></div>`}
+function numberAnswer(n,t){if(n===t){addStars(15,"🎉 Found it! +15");document.getElementById("numMsg").textContent="🌟 Correct!"}else document.getElementById("numMsg").textContent="😊 Try again!"}
+function startColorGame(){games++;save();let colors=[["RED","#ff4f70"],["BLUE","#4b83ff"],["GREEN","#2bb673"],["YELLOW","#ffc83d"]],target=colors[Math.floor(Math.random()*4)];document.getElementById("gameArea").innerHTML=`<div class="panel"><h3>🎨 Tap ${target[0]}</h3><div class="color-box" style="background:${target[1]}">${target[0]}</div><div class="color-options">${colors.map(c=>`<button style="background:${c[1]}" onclick="colorAnswer('${c[0]}','${target[0]}')"></button>`).join("")}</div><div class="feedback" id="colorMsg"></div></div>`}
+function colorAnswer(c,t){if(c===t){addStars(15,"🎉 Perfect color! +15");document.getElementById("colorMsg").textContent="🌈 Correct!"}else document.getElementById("colorMsg").textContent="😊 Try again!"}
 
-    document.getElementById("starCount").innerText = stars;
-    document.getElementById("progressStars").innerText = stars;
-
-  }
-
-
-  /* SCREEN NAVIGATION */
-
-  function showScreen(screenId) {
-
-    document.querySelectorAll(".screen").forEach(screen => {
-      screen.classList.remove("active");
-    });
-
-    document.getElementById(screenId).classList.add("active");
-
-    window.scrollTo(0,0);
-  }
-
-
-  /* ABC */
-
-  const letters = [
-    ["A","🍎 Apple"],
-    ["B","⚽ Ball"],
-    ["C","🐱 Cat"],
-    ["D","🐶 Dog"],
-    ["E","🥚 Egg"],
-    ["F","🐟 Fish"],
-    ["G","🍇 Grapes"],
-    ["H","🏠 House"],
-    ["I","🍦 Ice Cream"],
-    ["J","🧃 Juice"]
-  ];
-
-  let letterIndex = 0;
-
-  function nextLetter() {
-
-    letterIndex++;
-
-    if(letterIndex >= letters.length) {
-      letterIndex = 0;
-    }
-
-    document.getElementById("letter").innerText =
-      letters[letterIndex][0];
-
-    document.getElementById("word").innerText =
-      letters[letterIndex][1];
-
-    document.getElementById("abcMessage").innerText =
-      "🎉 Great! +5 Stars";
-
-    addStars(5);
-
-  }
-
-
-  /* MATH */
-
-  function mathAnswer(answer) {
-
-    let message = document.getElementById("mathMessage");
-
-    if(answer === 8) {
-
-      message.innerText = "🎉 Correct! +10 Stars ⭐";
-      addStars(10);
-
-    } else {
-
-      message.innerText = "😊 Try Again!";
-
-    }
-
-  }
-
-
-  /* QUIZ */
-
-  function quizAnswer(correct) {
-
-    let message = document.getElementById("quizMessage");
-
-    if(correct) {
-
-      message.innerText = "🎉 Amazing! +20 Stars ⭐";
-      addStars(20);
-
-    } else {
-
-      message.innerText = "😊 Not quite. Try again!";
-
-    }
-
-  }
-
-
-  /* GAME */
-
-  function gameAnswer(correct) {
-
-    let message = document.getElementById("gameMessage");
-
-    if(correct) {
-
-      message.innerText = "🏆 You Won! +15 Stars ⭐";
-      addStars(15);
-
-    } else {
-
-      message.innerText = "😄 Try another number!";
-
-    }
-
-  }
-
+renderPills();updateUI();newMath();startQuiz();
 </script>
-
 </body>
-  </html>
+</html>
