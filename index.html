@@ -80,7 +80,7 @@ main{padding:18px}.screen{display:none}.screen.active{display:block}.section-tit
 <button class="game" onclick="oddGame()"><span>🕵️</span><b>Odd One Out</b><small>Find different</small></button>
 </div><div id="gameArea" style="margin-top:15px"></div></main></section>
 
-<section id="stories" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">📖 Story Time</h2><div class="row"><button class="pill active" onclick="showStories('hi')">🇮🇳 हिंदी</button><button class="pill" onclick="showStories('en')">🇬🇧 English</button></div><div id="storyList"></div></main></section>
+<section id="stories" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">📖 Story Time</h2><div class="row"><button class="pill active" onclick="showStories('hi')">🇮🇳 हिंदी</button><button class="pill" onclick="showStories('en')">🇬🇧 English</button></div><div class="panel" style="padding:12px;margin-top:12px"><div id="voiceStatus" style="font-weight:800">🎙️ Kids Voice ready</div><div class="row" style="margin-top:8px"><button class="pill" onclick="pauseVoice()">⏸️ Pause</button><button class="pill" onclick="resumeVoice()">▶️ Resume</button><button class="pill" onclick="stopVoice()">⏹️ Stop</button></div><div class="muted" style="margin-top:8px">👧 Kid-friendly voice • Hindi & English • slow & clear</div></div><div id="storyList"></div></main></section>
 
 <section id="rewards" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🏆 Rewards</h2>
 <div class="reward" id="r1"><div class="badge">🥉</div><div><b>Bronze Learner</b><p>100 stars</p></div></div>
@@ -149,7 +149,88 @@ function add(n,msg){stars+=n;correct++;save();toast(msg||`⭐ +${n} Stars`);corr
 function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove("show"),1500)}
 function celebrate(){let c=document.getElementById("confetti");c.innerHTML="";for(let i=0;i<30;i++){let s=document.createElement("i");s.style.left=Math.random()*100+"%";s.style.top="-20px";s.style.animationDelay=Math.random()*250+"ms";s.style.background=["#7c6cff","#ff66b3","#4dd7ff","#ffd35a"][i%4];c.appendChild(s)}setTimeout(()=>c.innerHTML="",1100)}
 function go(id){tone(420,.04);document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active",b.dataset.n===id));scrollTo(0,0);if(id==="quiz")renderQuiz();if(id==="stories")showStories("hi");if(id==="progress"||id==="rewards")ui()}
-function speak(t){if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}
+/* Kid-friendly voice engine — uses the phone/browser's installed TTS voice.
+   A true recorded child voice cannot be embedded in a single offline HTML file,
+   so we use the closest available Hindi/English voice with a brighter pitch,
+   slower speed and short sentence chunks for reliable Android Chrome playback. */
+let speechQueue=[];
+let speechIndex=0;
+let speechActive=false;
+let speechPaused=false;
+let selectedVoice=null;
+function voiceList(){return ("speechSynthesis" in window)?speechSynthesis.getVoices():[]}
+function pickVoice(isHindi){
+  const voices=voiceList();
+  const lang=isHindi?["hi-IN","hi"]:["en-IN","en-US","en-GB","en"];
+  const exact=voices.filter(v=>lang.includes(v.lang));
+  const same=voices.filter(v=>lang.some(x=>v.lang.toLowerCase().startsWith(x.split("-")[0].toLowerCase())));
+  const pool=exact.length?exact:same;
+  const femaleLike=pool.find(v=>/female|woman|girl|child|kid|google हिन्दी|google hindi|samantha|ava|karen|moira|siri/i.test(v.name));
+  selectedVoice=femaleLike||pool[0]||null;
+  return selectedVoice;
+}
+function splitSpeech(text){
+  const clean=String(text).replace(/\s+/g," ").trim();
+  if(!clean)return [];
+  const parts=clean.match(/[^.!?।॥]+[.!?।॥]+|[^.!?।॥]+$/g)||[clean];
+  const out=[];
+  let buf="";
+  parts.forEach(p=>{
+    p=p.trim();
+    if((buf+p).length<=180) buf+=(buf?" ":"")+p;
+    else {if(buf)out.push(buf);buf=p;}
+  });
+  if(buf)out.push(buf);
+  return out;
+}
+function stopVoice(){
+  if("speechSynthesis" in window) speechSynthesis.cancel();
+  speechQueue=[];speechIndex=0;speechActive=false;speechPaused=false;
+  const b=document.getElementById("voiceStatus");if(b)b.textContent="🎙️ Kids Voice ready";
+}
+function pauseVoice(){
+  if(!("speechSynthesis" in window))return;
+  if(speechSynthesis.speaking&&!speechSynthesis.paused){speechSynthesis.pause();speechPaused=true;const b=document.getElementById("voiceStatus");if(b)b.textContent="⏸️ Voice paused";}
+}
+function resumeVoice(){
+  if(!("speechSynthesis" in window))return;
+  if(speechSynthesis.paused){speechSynthesis.resume();speechPaused=false;const b=document.getElementById("voiceStatus");if(b)b.textContent="▶️ Kids Voice playing";}
+}
+function speak(t){
+  if(!soundOn){toast("🔇 Sound OFF — ऊपर Sound ON दबाएँ");return;}
+  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){toast("🔊 इस browser में voice support नहीं है");return;}
+  const text=String(t).trim(); if(!text)return;
+  stopVoice();
+  const isHindi=/[\u0900-\u097F]/.test(text);
+  const chunks=splitSpeech(text);
+  speechQueue=chunks;speechIndex=0;speechActive=true;
+  const v=pickVoice(isHindi);
+  const status=document.getElementById("voiceStatus");
+  if(status)status.textContent=v?"👧 Kids Voice playing":"👧 Kid-style voice playing";
+  function next(){
+    if(!speechActive||speechIndex>=speechQueue.length){speechActive=false;if(status)status.textContent="🎙️ Kids Voice ready";return;}
+    const u=new SpeechSynthesisUtterance(speechQueue[speechIndex]);
+    u.lang=isHindi?"hi-IN":"en-IN";
+    u.rate=isHindi?0.78:0.82;
+    u.pitch=isHindi?1.30:1.24;
+    u.volume=1;
+    if(v)u.voice=v;
+    u.onend=()=>{speechIndex++;setTimeout(next,70)};
+    u.onerror=()=>{speechIndex++;setTimeout(next,70)};
+    try{speechSynthesis.resume();speechSynthesis.speak(u)}catch(e){speechActive=false;toast("🔊 Voice start nahi ho paayi")}
+  }
+  setTimeout(next,120);
+}
+function warmVoice(){
+  if(!window.speechSynthesis)return;
+  try{speechSynthesis.cancel();speechSynthesis.resume();speechSynthesis.getVoices();}catch(e){}
+}
+if("speechSynthesis" in window){
+  speechSynthesis.getVoices();
+  speechSynthesis.onvoiceschanged=()=>{speechSynthesis.getVoices();};
+  window.addEventListener("pageshow",warmVoice);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&speechActive&&!speechPaused)try{speechSynthesis.resume()}catch(e){}});
+}
 function renderABC(){document.getElementById("abcL").textContent=A[ai][0];document.getElementById("abcW").textContent=A[ai][1];document.getElementById("abcP").innerHTML=A.map((x,i)=>`<button class="pill ${i===ai?"active":""}" onclick="setABC(${i})">${x[0]}</button>`).join("")}
 function setABC(i){ai=i;renderABC();tone(600,.06)}
 function nextABC(){ai=(ai+1)%A.length;renderABC();add(5,"🎉 +5 Stars");speak(A[ai][0])}
