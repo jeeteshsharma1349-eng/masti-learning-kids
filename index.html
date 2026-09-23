@@ -1,1 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#6C63FF">
+  <title>Masti Learning Kids</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f7ff;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 600px;
+      margin: auto;
+      min-height: 100vh;
+      background: #ffffff;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #6c63ff, #8f7cff);
+      color: white;
+      padding: 25px 20px;
+      border-radius: 0 0 30px 30px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .welcome {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    h1 {
+      font-size: 27px;
+      margin-top: 5px;
+    }
+
+    .stars {
+      background: rgba(255,255,255,0.2);
+      padding: 10px 14px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    /* CONTENT */
+    main {
+      padding: 20px;
+    }
+
+    .section-title {
+      font-size: 21px;
+      margin: 20px 0 12px;
+    }
+
+    /* FEATURE CARD */
+    .daily {
+      background: linear-gradient(135deg, #ffcf5c, #ff9f43);
+      color: white;
+      padding: 20px;
+      border-radius: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(255,159,67,0.25);
+    }
+
+    .daily h2 {
+      margin-bottom: 8px;
+    }
+
+    .daily button {
+      margin-top: 12px;
+      background: white;
+      color: #ff8c00;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      border: none;
+      padding: 20px 12px;
+      border-radius: 22px;
+      background: #f2f3ff;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.06);
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .icon {
+      font-size: 38px;
+      margin-bottom: 8px;
+    }
+
+    .card h3 {
+      font-size: 17px;
+    }
+
+    .card p {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
+
+    /* SCREEN */
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    .back {
+      border: none;
+      background: #eeeeff;
+      padding: 10px 15px;
+      border-radius: 15px;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    /* LEARN */
+    .lesson {
+      background: #f7f7ff;
+      padding: 25px;
+      border-radius: 25px;
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    .big-letter {
+      font-size: 90px;
+      font-weight: bold;
+      color: #6c63ff;
+    }
+
+    .lesson button,
+    .quiz-option {
+      border: none;
+      background: #6c63ff;
+      color: white;
+      padding: 13px;
+      border-radius: 15px;
+      margin-top: 12px;
+      width: 100%;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* QUIZ */
+    .question {
+      background: #f3f4ff;
+      padding: 20px;
+      border-radius: 20px;
+      font-size: 20px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    /* GAME */
+    .game-box {
+      text-align: center;
+      background: #f7f7ff;
+      padding: 30px 20px;
+      border-radius: 25px;
+    }
+
+    .number {
+      font-size: 60px;
+      color: #6c63ff;
+      font-weight: bold;
+    }
+
+    .game-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .game-buttons button {
+      padding: 18px;
+      border: none;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    /* REWARDS */
+    .reward {
+      background: #fff7d6;
+      padding: 20px;
+      border-radius: 20px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .reward-icon {
+      font-size: 45px;
+    }
+
+    /* BOTTOM NAV */
+    .bottom-nav {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      border-top: 1px solid #eee;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 5px;
+    }
+
+    .bottom-nav button {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .bottom-nav span {
+      display: block;
+      font-size: 23px;
+      margin-bottom: 3px;
+    }
+
+    .message {
+      text-align: center;
+      margin-top: 15px;
+      font-weight: bold;
+      min-height: 25px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- HOME -->
+  <section id="home" class="screen active">
+
+    <header>
+      <div class="top">
+        <div>
+          <div class="welcome">👋 Welcome Champ!</div>
+          <h1>Masti Learning 🎓</h1>
+        </div>
+
+        <div class="stars">
+          ⭐ <span id="starCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+
+      <div class="daily">
+        <h2>🌟 Daily Challenge</h2>
+        <p>Complete today's challenge and earn stars!</p>
+        <button onclick="showScreen('quiz')">Start Challenge 🚀</button>
+      </div>
+
+      <h2 class="section-title">📚 Learn & Play</h2>
+
+      <div class="grid">
+
+        <button class="card" onclick="showScreen('abc')">
+          <div class="icon">🔤</div>
+          <h3>ABC Learning</h3>
+          <p>Learn English</p>
+        </button>
+
+        <button class="card" onclick="showScreen('math')">
+          <div class="icon">🔢</div>
+          <h3>Maths Fun</h3>
+          <p>Learn numbers</p>
+        </button>
+
+        <button class="card" onclick="showScreen('quiz')">
+          <div class="icon">🧠</div>
+          <h3>Quiz Time</h3>
+          <p>Test your brain</p>
+        </button>
+
+        <button class="card" onclick="showScreen('games')">
+          <div class="icon">🎮</div>
+          <h3>Mini Games</h3>
+          <p>Play & learn</p>
+        </button>
+
+        <button class="card" onclick="showScreen('rewards')">
+          <div class="icon">🏆</div>
+          <h3>My Rewards</h3>
+          <p>See your badges</p>
+        </button>
+
+        <button class="card" onclick="showScreen('progress')">
+          <div class="icon">📊</div>
+          <h3>My Progress</h3>
+          <p>Track learning</p>
+        </button>
+
+      </div>
+
+    </main>
+  </section>
+
+
+  <!-- ABC -->
+  <section id="abc" class="screen">
+
+    <main>
+      <button class="back" onclick="showScreen('home')">← Home</button>
+
+      <h2 class="section-title">🔤 ABC Learning</h2>
+
+      <div class="lesson">
+        <div class="big-letter" id="letter">A</div>
+
+        <h2 id="word">🍎 Apple</h2>
+
+        <p style="margin-top:10px;">
+          A for Apple
+        </p>
+
+        <button onclick="nextLetter()">
+          Next Letter ➡️
+        </button>
+
+        <div class="message" id="abcMessage"></div>
+      </div>
+
+    </main>
+  </section>
+
+
+  <!-- MATH -->
+  <section id="math" class="screen">
+
+    <main>
+
+      <button class="back" onclick="showScreen('home')">← Home</button>
+
+      <h2 class="section-title">🔢 Maths Fun</h2>
+
+      <div class="question">
+        What is <b>5 + 3</b>?
+      </div>
+
+      <button class="quiz-option" onclick="mathAnswer(6)">6</button>
+      <button class="quiz-option" onclick="mathAnswer(8)">8</button>
+      <button class="quiz-option" onclick="mathAnswer(9)">9</button>
+
+      <div class="message" id="mathMessage"></div>
+
+    </main>
+  </section>
+
+
+  <!-- QUIZ -->
+  <section id="quiz" class="screen">
+
+    <main>
+
+      <button class="back" onclick="showScreen('home')">← Home</button>
+
+      <h2 class="section-title">🧠 Quiz Time</h2>
+
+      <div class="question">
+        🇮🇳 What is the capital of India?
+      </div>
+
+      <button class="quiz-option" onclick="quizAnswer(false)">Mumbai</button>
+      <button class="quiz-option" onclick="quizAnswer(true)">New Delhi</button>
+      <button class="quiz-option" onclick="quizAnswer(false)">Kolkata</button>
+      <button class="quiz-option" onclick="quizAnswer(false)">Chennai</button>
+
+      <div class="message" id="quizMessage"></div>
+
+    </main>
+  </section>
+
+
+  <!-- GAMES -->
+  <section id="games" class="screen">
+
+    <main>
+
+      <button class="back" onclick="showScreen('home')">← Home</button>
+
+      <h2 class="section-title">🎮 Number Game</h2>
+
+      <div class="game-box">
+
+        <p>Find the correct number!</p>
+
+        <div class="number">7</div>
+
+        <div class="game-buttons">
+          <button onclick="gameAnswer(false)">4</button>
+          <button onclick="gameAnswer(true)">7</button>
+          <button onclick="gameAnswer(false)">9</button>
+          <button onclick="gameAnswer(false)">3</button>
+        </div>
+
+        <div class="message" id="gameMessage"></div>
+
+      </div>
+
+    </main>
+  </section>
+
+
+  <!-- REWARDS -->
+  <section id="rewards" class="screen">
+
+    <main>
+
+      <button class="back" onclick="showScreen('home')">← Home</button>
+
+      <h2 class="section-title">🏆 My Rewards</h2>
+
+      <div class="reward">
+        <div class="reward-icon">🥉</div>
+        <h3>Bronze Learner</h3>
+        <p>Earn 100 Stars</p>
+      </div>
+
+      <div class="reward">
+        <div class="reward-icon">🥈</div>
+        <h3>Smart Learner</h3>
+        <p>Earn 500 Stars</p>
+      </div>
+
+      <div class="reward">
+        <div class="reward-icon">🥇</div>
+        <h3>Super Champ</h3>
+        <p>Earn 1000 Stars</p>
+      </div>
+
+    </main>
+  </section>
+
+
+  <!-- PROGRESS -->
+  <section id="progress" class="screen">
+
+    <main>
+
+      <button class="back" onclick="showScreen('home')">← Home</button>
+
+      <h2 class="section-title">📊 My Progress</h2>
+
+      <div class="lesson">
+        <h2>⭐ Stars</h2>
+        <div style="font-size:40px;margin:10px;" id="progressStars">0</div>
+        <p>Keep learning and earn more!</p>
+      </div>
+
+      <div class="lesson">
+        <h2>🔥 Daily Streak</h2>
+        <div style="font-size:40px;margin:10px;">1 Day</div>
+        <p>Come back tomorrow!</p>
+      </div>
+
+    </main>
+  </section>
+
+
+  <!-- BOTTOM NAV -->
+
+  <nav class="bottom-nav">
+
+    <button onclick="showScreen('home')">
+      <span>🏠</span>
+      Home
+    </button>
+
+    <button onclick="showScreen('abc')">
+      <span>📚</span>
+      Learn
+    </button>
+
+    <button onclick="showScreen('games')">
+      <span>🎮</span>
+      Games
+    </button>
+
+    <button onclick="showScreen('rewards')">
+      <span>🏆</span>
+      Rewards
+    </button>
+
+  </nav>
+
+</div>
+
+
+<script>
+
+  /* STAR SYSTEM */
+
+  let stars = 0;
+
+  function addStars(amount) {
+
+    stars += amount;
+
+    document.getElementById("starCount").innerText = stars;
+    document.getElementById("progressStars").innerText = stars;
+
+  }
+
+
+  /* SCREEN NAVIGATION */
+
+  function showScreen(screenId) {
+
+    document.querySelectorAll(".screen").forEach(screen => {
+      screen.classList.remove("active");
+    });
+
+    document.getElementById(screenId).classList.add("active");
+
+    window.scrollTo(0,0);
+  }
+
+
+  /* ABC */
+
+  const letters = [
+    ["A","🍎 Apple"],
+    ["B","⚽ Ball"],
+    ["C","🐱 Cat"],
+    ["D","🐶 Dog"],
+    ["E","🥚 Egg"],
+    ["F","🐟 Fish"],
+    ["G","🍇 Grapes"],
+    ["H","🏠 House"],
+    ["I","🍦 Ice Cream"],
+    ["J","🧃 Juice"]
+  ];
+
+  let letterIndex = 0;
+
+  function nextLetter() {
+
+    letterIndex++;
+
+    if(letterIndex >= letters.length) {
+      letterIndex = 0;
+    }
+
+    document.getElementById("letter").innerText =
+      letters[letterIndex][0];
+
+    document.getElementById("word").innerText =
+      letters[letterIndex][1];
+
+    document.getElementById("abcMessage").innerText =
+      "🎉 Great! +5 Stars";
+
+    addStars(5);
+
+  }
+
+
+  /* MATH */
+
+  function mathAnswer(answer) {
+
+    let message = document.getElementById("mathMessage");
+
+    if(answer === 8) {
+
+      message.innerText = "🎉 Correct! +10 Stars ⭐";
+      addStars(10);
+
+    } else {
+
+      message.innerText = "😊 Try Again!";
+
+    }
+
+  }
+
+
+  /* QUIZ */
+
+  function quizAnswer(correct) {
+
+    let message = document.getElementById("quizMessage");
+
+    if(correct) {
+
+      message.innerText = "🎉 Amazing! +20 Stars ⭐";
+      addStars(20);
+
+    } else {
+
+      message.innerText = "😊 Not quite. Try again!";
+
+    }
+
+  }
+
+
+  /* GAME */
+
+  function gameAnswer(correct) {
+
+    let message = document.getElementById("gameMessage");
+
+    if(correct) {
+
+      message.innerText = "🏆 You Won! +15 Stars ⭐";
+      addStars(15);
+
+    } else {
+
+      message.innerText = "😄 Try another number!";
+
+    }
+
+  }
+
+</script>
+
+</body>
+  </html>
