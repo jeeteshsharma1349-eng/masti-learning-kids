@@ -1,199 +1,141 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#6C63FF">
-<title>Masti Learning Kids V2</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6c63ff">
+<title>Masti Learning Kids — V3</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#6c63ff;--primary2:#8b7cff;--bg:#f7f8ff;--card:#fff;--text:#202238;--muted:#74778b;--green:#2bb673;--orange:#ffab45;--pink:#ff6fae}
-body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text)}
-button{font:inherit}
-.app{max-width:650px;margin:auto;min-height:100vh;background:var(--bg);padding-bottom:76px}
-header{background:linear-gradient(135deg,#6558f5,#9a7cff);color:#fff;padding:25px 20px 28px;border-radius:0 0 32px 32px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.welcome{font-size:15px;opacity:.92}
-h1{font-size:28px;margin-top:5px}.stars{background:#ffffff25;padding:11px 15px;border-radius:22px;font-weight:700;white-space:nowrap}
-main{padding:18px}.section-title{font-size:21px;margin:19px 0 12px}
-.daily{background:linear-gradient(135deg,#ffd45e,#ff9e42);color:#fff;padding:20px;border-radius:24px;box-shadow:0 10px 25px #ffae4730}
-.daily h2{margin-bottom:7px}.daily p{line-height:1.45}.daily button,.primary{border:0;background:#fff;color:#e88918;padding:12px 18px;border-radius:22px;font-weight:700;margin-top:13px;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-.card{border:0;padding:19px 10px;border-radius:23px;background:#fff;text-align:center;cursor:pointer;box-shadow:0 7px 18px #4d50a40c;min-height:150px}
-.card:active,.option:active,.game-card:active{transform:scale(.98)}
-.icon{font-size:40px;margin-bottom:8px}.card h3{font-size:17px}.card p{font-size:12px;color:var(--muted);margin-top:5px}
-.screen{display:none}.screen.active{display:block}.back{border:0;background:#ececff;padding:10px 14px;border-radius:15px;cursor:pointer;margin-bottom:12px}
-.panel{background:#fff;border-radius:24px;padding:20px;box-shadow:0 8px 22px #4d50a40d;margin-bottom:14px}
-.hero{text-align:center;background:linear-gradient(135deg,#eef0ff,#fff)}
-.big{font-size:88px;font-weight:800;color:var(--primary);line-height:1.1}.word{font-size:25px;font-weight:800}.sub{color:var(--muted);margin-top:7px}
-.row{display:flex;gap:10px;overflow:auto;padding-bottom:5px}.pill{border:0;background:#f0f1ff;padding:10px 15px;border-radius:20px;white-space:nowrap;cursor:pointer}.pill.active{background:var(--primary);color:#fff}
-.option{width:100%;border:0;background:#f0f1ff;padding:15px;border-radius:17px;margin-top:10px;text-align:left;cursor:pointer;font-weight:700}
-.option.correct{background:#dff8eb;color:#14794b}.option.wrong{background:#ffe4ea;color:#a52b4b}
-.feedback{text-align:center;min-height:28px;margin-top:13px;font-weight:800}
-.score{text-align:center;font-size:18px;margin-bottom:12px}
-.game-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.game-card{border:0;border-radius:20px;background:#f0f1ff;padding:22px 10px;cursor:pointer;text-align:center}.game-card div{font-size:38px;margin-bottom:7px}
-.memory{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.memory button{height:65px;border:0;border-radius:14px;background:#ececff;font-size:25px;cursor:pointer}.memory button.open{background:#fff3cf}
-.color-box{height:125px;border-radius:24px;margin:14px 0;background:#ff4f70;display:flex;align-items:center;justify-content:center;color:#fff;font-size:23px;font-weight:800}
-.color-options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.color-options button{height:55px;border:0;border-radius:15px;cursor:pointer}
-.reward{display:flex;align-items:center;gap:15px;background:#fff;padding:16px;border-radius:20px;margin-bottom:10px}.badge{font-size:42px}.locked{opacity:.45}
-.progressbar{height:14px;background:#ececff;border-radius:20px;overflow:hidden;margin-top:10px}.progressfill{height:100%;background:linear-gradient(90deg,#6c63ff,#a38cff);width:0}
-.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#fff;padding:16px 8px;border-radius:18px;text-align:center}.stat b{display:block;font-size:23px}.stat span{font-size:11px;color:var(--muted)}
-.bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(650px,100%);background:#fff;border-top:1px solid #e7e7ee;display:grid;grid-template-columns:repeat(4,1fr);padding:9px 5px calc(9px + env(safe-area-inset-bottom));z-index:20}.bottom-nav button{border:0;background:transparent;color:#626579;cursor:pointer;font-size:12px}.bottom-nav span{display:block;font-size:22px;margin-bottom:2px}.bottom-nav button.active{color:var(--primary);font-weight:800}
-.toast{position:fixed;left:50%;bottom:88px;transform:translateX(-50%) translateY(20px);background:#202238;color:#fff;padding:12px 18px;border-radius:25px;opacity:0;pointer-events:none;transition:.25s;z-index:30;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.confetti{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}.confetti i{position:absolute;width:8px;height:14px;animation:fall 900ms ease-out forwards}@keyframes fall{to{transform:translateY(100vh) rotate(720deg);opacity:0}}
-@media(max-width:380px){h1{font-size:24px}.grid{gap:10px}.card{min-height:140px}.big{font-size:75px}}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f5f7ff;color:#202238}.app{max-width:680px;margin:auto;min-height:100vh;padding-bottom:82px}
+header{background:linear-gradient(135deg,#6658f5,#9a7cff);color:white;padding:24px 18px 28px;border-radius:0 0 30px 30px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.welcome{opacity:.9}h1{font-size:28px;margin:5px 0}.stars{background:#ffffff2b;padding:11px 15px;border-radius:22px;font-weight:800}
+main{padding:18px}.screen{display:none}.screen.active{display:block}.section-title{font-size:22px;margin:18px 0 12px}.back,.tab{border:0;background:#ececff;padding:11px 15px;border-radius:15px;cursor:pointer}.daily{padding:20px;border-radius:24px;background:linear-gradient(135deg,#ffd45b,#ff9e42);color:white;box-shadow:0 10px 25px #ffae4730}.daily h2{margin:0 0 7px}.daily button,.primary{border:0;background:white;color:#df8517;padding:12px 17px;border-radius:22px;font-weight:800;cursor:pointer;margin-top:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.card{border:0;background:white;border-radius:22px;padding:20px 10px;min-height:145px;box-shadow:0 6px 18px #4c4c8b10;cursor:pointer}.icon{font-size:40px}.card h3{margin:8px 0 4px}.muted{color:#77798a}.panel{background:white;border-radius:23px;padding:18px;box-shadow:0 6px 18px #4c4c8b0b;margin-bottom:14px}.hero{text-align:center;background:linear-gradient(135deg,#eef0ff,#fff)}.big{font-size:80px;font-weight:900;color:#675bf4}.word{font-size:25px;font-weight:800}.row{display:flex;gap:8px;overflow-x:auto;padding-bottom:5px}.pill{border:0;background:#eeeefe;padding:10px 14px;border-radius:20px;white-space:nowrap;cursor:pointer}.pill.active{background:#6c63ff;color:#fff}.option{display:block;width:100%;margin:9px 0;padding:14px;border:0;border-radius:16px;background:#eff0ff;text-align:left;font-weight:700;cursor:pointer}.option.correct{background:#dff7e9;color:#16734b}.option.wrong{background:#ffe2e8;color:#9e2948}.feedback{text-align:center;font-weight:800;min-height:27px;margin-top:10px}.score{text-align:center;margin-bottom:12px}.gamegrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.game{border:0;background:#f0f1ff;border-radius:20px;padding:20px 8px;cursor:pointer}.game b{display:block;margin-top:6px}.game span{font-size:38px}.memory{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.memory button{height:65px;border:0;border-radius:14px;background:#e9eaff;font-size:26px}.memory .open{background:#fff1c9}.colorgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.colorgrid button{height:58px;border:0;border-radius:15px}.shape{font-size:80px;text-align:center;margin:10px}.reward{display:flex;gap:14px;align-items:center;background:#fff;padding:15px;border-radius:18px;margin:10px 0}.badge{font-size:40px}.locked{opacity:.4}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:white;padding:15px 7px;border-radius:18px;text-align:center}.stat b{font-size:24px;display:block}.bar{height:13px;background:#e8e9f6;border-radius:20px;overflow:hidden;margin-top:10px}.fill{height:100%;background:linear-gradient(90deg,#6c63ff,#9a7cff);width:0}.bottom{position:fixed;z-index:10;bottom:0;left:50%;transform:translateX(-50%);width:min(680px,100%);display:grid;grid-template-columns:repeat(4,1fr);background:#fff;border-top:1px solid #ddd;padding:8px 4px}.bottom button{border:0;background:transparent;color:#626579;font-size:12px}.bottom span{display:block;font-size:23px}.bottom .active{color:#6257ed;font-weight:800}.toast{position:fixed;z-index:20;bottom:85px;left:50%;transform:translateX(-50%);background:#22253a;color:#fff;padding:11px 17px;border-radius:22px;opacity:0;transition:.2s}.toast.show{opacity:1}
+@media(max-width:380px){h1{font-size:24px}.grid{gap:9px}.card{min-height:135px}.big{font-size:70px}}
 </style>
 </head>
 <body>
 <div class="app">
+<header><div class="top"><div><div class="welcome">👋 Welcome Champ!</div><h1>Masti Learning 🎓</h1></div><div class="stars">⭐ <span id="stars">0</span></div></div></header>
 
-<header>
-  <div class="top">
-    <div><div class="welcome">👋 Welcome Champ!</div><h1>Masti Learning 🎓</h1></div>
-    <div class="stars">⭐ <span id="stars">0</span></div>
-  </div>
-</header>
+<section id="home" class="screen active"><main>
+<div class="daily"><h2>🌟 Today's Masti Challenge</h2><div>Quiz + Game + Learning complete karo aur stars collect karo!</div><button onclick="go('quiz')">Start Challenge 🚀</button></div>
+<h2 class="section-title">📚 Learn & Play</h2>
+<div class="grid">
+<button class="card" onclick="go('abc')"><div class="icon">🔤</div><h3>ABC World</h3><p class="muted">A–Z + pronunciation</p></button>
+<button class="card" onclick="go('hindi')"><div class="icon">🇮🇳</div><h3>Hindi सीखो</h3><p class="muted">अक्षर + शब्द</p></button>
+<button class="card" onclick="go('math')"><div class="icon">🔢</div><h3>Maths Lab</h3><p class="muted">Addition & subtraction</p></button>
+<button class="card" onclick="go('quiz')"><div class="icon">🧠</div><h3>Quiz Arena</h3><p class="muted">20+ questions</p></button>
+<button class="card" onclick="go('games')"><div class="icon">🎮</div><h3>Game Zone</h3><p class="muted">4 different games</p></button>
+<button class="card" onclick="go('stories')"><div class="icon">📖</div><h3>Story Time</h3><p class="muted">Short fun stories</p></button>
+<button class="card" onclick="go('rewards')"><div class="icon">🏆</div><h3>Rewards</h3><p class="muted">Badges & levels</p></button>
+<button class="card" onclick="go('progress')"><div class="icon">📊</div><h3>Progress</h3><p class="muted">Learning report</p></button>
+</div></main></section>
 
-<section id="home" class="screen active">
-<main>
-  <div class="daily">
-    <h2>🌟 Daily Challenge</h2>
-    <p>Learn something new, play a game and collect stars!</p>
-    <button onclick="go('quiz')">Start Challenge 🚀</button>
-  </div>
-  <h2 class="section-title">📚 Learn & Play</h2>
-  <div class="grid">
-    <button class="card" onclick="go('abc')"><div class="icon">🔤</div><h3>ABC Learning</h3><p>Letters, words & sounds</p></button>
-    <button class="card" onclick="go('math')"><div class="icon">🔢</div><h3>Maths Fun</h3><p>Add, subtract & count</p></button>
-    <button class="card" onclick="go('hindi')"><div class="icon">🇮🇳</div><h3>Hindi सीखो</h3><p>अ से अनार तक</p></button>
-    <button class="card" onclick="go('quiz')"><div class="icon">🧠</div><h3>Quiz Time</h3><p>Test your brain</p></button>
-    <button class="card" onclick="go('games')"><div class="icon">🎮</div><h3>Mini Games</h3><p>Play & learn</p></button>
-    <button class="card" onclick="go('rewards')"><div class="icon">🏆</div><h3>My Rewards</h3><p>Collect badges</p></button>
-    <button class="card" onclick="go('progress')"><div class="icon">📊</div><h3>My Progress</h3><p>See your learning</p></button>
-  </div>
-</main>
-</section>
+<section id="abc" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🔤 ABC World</h2>
+<div class="panel hero"><div class="big" id="abcL">A</div><div class="word" id="abcW">🍎 Apple</div><p class="muted">Letter ko suno aur next word seekho.</p><button class="primary" onclick="speakABC()">🔊 Hear</button> <button class="primary" onclick="nextABC()">Next ➡️</button><div class="feedback" id="abcF"></div></div><div class="row" id="abcP"></div></main></section>
 
-<section id="abc" class="screen"><main>
-<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🔤 ABC Learning</h2>
-<div class="panel hero"><div class="big" id="abcLetter">A</div><div class="word" id="abcWord">🍎 Apple</div><div class="sub">Tap the button to hear the word.</div>
-<button class="primary" onclick="speakABC()">🔊 Hear it</button>
-<button class="primary" onclick="nextABC()">Next Letter ➡️</button><div class="feedback" id="abcFeedback"></div></div>
-<div class="row" id="abcPills"></div>
-</main></section>
+<section id="hindi" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🇮🇳 Hindi सीखो</h2>
+<div class="panel hero"><div class="big" id="hiL">अ</div><div class="word" id="hiW">🍎 अनार</div><button class="primary" onclick="speakHI()">🔊 सुनो</button><button class="primary" onclick="nextHI()">अगला ➡️</button><div class="feedback" id="hiF"></div></div><div class="row" id="hiP"></div></main></section>
 
-<section id="hindi" class="screen"><main>
-<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🇮🇳 Hindi सीखो</h2>
-<div class="panel hero"><div class="big" id="hiLetter">अ</div><div class="word" id="hiWord">🍎 अनार</div><div class="sub">अक्षर बोलकर भी सुनो 🔊</div>
-<button class="primary" onclick="speakHindi()">🔊 सुनो</button><button class="primary" onclick="nextHindi()">अगला ➡️</button><div class="feedback" id="hiFeedback"></div></div>
-<div class="row" id="hiPills"></div>
-</main></section>
+<section id="math" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🔢 Maths Lab</h2>
+<div class="row"><button class="pill active" onclick="mathMode='add';newMath()">➕ Addition</button><button class="pill" onclick="mathMode='sub';newMath()">➖ Subtraction</button></div>
+<div class="panel" style="margin-top:12px"><div class="score">Math Stars: ⭐ <b id="ms">0</b></div><h2 id="mq" style="text-align:center;font-size:30px;margin:14px"></h2><div id="mo"></div><div class="feedback" id="mf"></div></div></main></section>
 
-<section id="math" class="screen"><main>
-<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🔢 Maths Fun</h2>
-<div class="panel"><div class="score">⭐ Stars: <b id="mathScore">0</b></div><div class="question" id="mathQuestion" style="font-size:26px;font-weight:800;text-align:center;padding:15px">5 + 3 = ?</div><div id="mathOptions"></div><div class="feedback" id="mathFeedback"></div></div>
-</main></section>
+<section id="quiz" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🧠 Quiz Arena</h2>
+<div class="row"><button class="pill active" onclick="quizCat='mixed';resetQuiz()">🌈 Mixed</button><button class="pill" onclick="quizCat='science';resetQuiz()">🔬 Science</button><button class="pill" onclick="quizCat='gk';resetQuiz()">🌍 GK</button><button class="pill" onclick="quizCat='math';resetQuiz()">🔢 Maths</button></div>
+<div class="panel" style="margin-top:12px"><div class="score">Question <b id="qn">1</b>/10 · ⭐ <b id="qs">0</b></div><h3 id="qq" style="font-size:21px;text-align:center;line-height:1.4"></h3><div id="qo"></div><div class="feedback" id="qf"></div></div></main></section>
 
-<section id="quiz" class="screen"><main>
-<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🧠 Quiz Time</h2>
-<div class="panel"><div class="score">Question <b id="qNum">1</b>/5 · ⭐ <b id="qScore">0</b></div><div class="question" id="question" style="font-size:21px;font-weight:800;text-align:center;padding:12px"></div><div id="quizOptions"></div><div class="feedback" id="quizFeedback"></div></div>
-</main></section>
+<section id="games" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🎮 Game Zone</h2>
+<div class="gamegrid">
+<button class="game" onclick="memory()"><span>🧩</span><b>Memory Match</b><small>Find pairs</small></button>
+<button class="game" onclick="numberHunt()"><span>🔢</span><b>Number Hunt</b><small>Find target</small></button>
+<button class="game" onclick="colorGame()"><span>🎨</span><b>Color Master</b><small>Pick correct color</small></button>
+<button class="game" onclick="oddGame()"><span>🕵️</span><b>Odd One Out</b><small>Find different</small></button>
+</div><div id="gameArea" style="margin-top:15px"></div></main></section>
 
-<section id="games" class="screen"><main>
-<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🎮 Mini Games</h2>
-<div class="game-grid">
-<button class="game-card" onclick="startMemory()"><div>🧩</div><b>Memory Match</b><small>Find pairs</small></button>
-<button class="game-card" onclick="startNumberGame()"><div>🔢</div><b>Number Hunt</b><small>Find the number</small></button>
-<button class="game-card" onclick="startColorGame()"><div>🎨</div><b>Color Game</b><small>Pick the color</small></button>
-<button class="game-card" onclick="go('quiz')"><div>🧠</div><b>Quick Quiz</b><small>Learn & score</small></button>
-</div>
-<div id="gameArea" style="margin-top:15px"></div>
-</main></section>
+<section id="stories" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">📖 Story Time</h2><div id="storyList"></div></main></section>
 
-<section id="rewards" class="screen"><main>
-<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🏆 My Rewards</h2>
-<div class="reward" id="bronze"><div class="badge">🥉</div><div><b>Bronze Learner</b><p>100 Stars</p></div></div>
-<div class="reward" id="silver"><div class="badge">🥈</div><div><b>Smart Learner</b><p>500 Stars</p></div></div>
-<div class="reward" id="gold"><div class="badge">🥇</div><div><b>Super Champ</b><p>1000 Stars</p></div></div>
-<div class="reward" id="crown"><div class="badge">👑</div><div><b>Learning King/Queen</b><p>2500 Stars</p></div></div>
-</main></section>
+<section id="rewards" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">🏆 Rewards</h2>
+<div class="reward" id="r1"><div class="badge">🥉</div><div><b>Bronze Learner</b><p>100 stars</p></div></div>
+<div class="reward" id="r2"><div class="badge">🥈</div><div><b>Smart Learner</b><p>500 stars</p></div></div>
+<div class="reward" id="r3"><div class="badge">🥇</div><div><b>Super Champ</b><p>1000 stars</p></div></div>
+<div class="reward" id="r4"><div class="badge">👑</div><div><b>Learning Champion</b><p>2500 stars</p></div></div></main></section>
 
-<section id="progress" class="screen"><main>
-<button class="back" onclick="go('home')">← Home</button><h2 class="section-title">📊 My Progress</h2>
-<div class="stat-grid"><div class="stat"><b id="pStars">0</b><span>Stars</span></div><div class="stat"><b id="pCorrect">0</b><span>Correct</span></div><div class="stat"><b id="pGames">0</b><span>Games</span></div></div>
-<div class="panel" style="margin-top:14px"><b>⭐ Level Progress</b><div class="progressbar"><div class="progressfill" id="levelFill"></div></div><p class="sub" id="levelText">Level 1 · Keep learning!</p></div>
-<div class="panel"><b>🔥 Daily Streak</b><h2 style="margin-top:8px">1 Day</h2><p class="sub">Come back tomorrow for another challenge.</p></div>
-</main></section>
+<section id="progress" class="screen"><main><button class="back" onclick="go('home')">← Home</button><h2 class="section-title">📊 My Progress</h2>
+<div class="stats"><div class="stat"><b id="ps">0</b><span>Stars</span></div><div class="stat"><b id="pc">0</b><span>Correct</span></div><div class="stat"><b id="pg">0</b><span>Games</span></div></div>
+<div class="panel" style="margin-top:13px"><b id="lvl">Level 1</b><div class="bar"><div class="fill" id="fill"></div></div><p class="muted" id="lt">100 stars to next level</p></div>
+<div class="panel"><b>🔥 Daily Streak</b><h2>1 Day</h2><p class="muted">Roz thoda seekho, roz masti karo!</p></div></main></section>
 
-<nav class="bottom-nav">
-<button onclick="go('home')" data-nav="home" class="active"><span>🏠</span>Home</button>
-<button onclick="go('abc')" data-nav="abc"><span>📚</span>Learn</button>
-<button onclick="go('games')" data-nav="games"><span>🎮</span>Games</button>
-<button onclick="go('rewards')" data-nav="rewards"><span>🏆</span>Rewards</button>
-</nav>
-</div>
-<div class="toast" id="toast"></div><div class="confetti" id="confetti"></div>
+<nav class="bottom"><button data-n="home" class="active" onclick="go('home')"><span>🏠</span>Home</button><button data-n="abc" onclick="go('abc')"><span>📚</span>Learn</button><button data-n="games" onclick="go('games')"><span>🎮</span>Games</button><button data-n="rewards" onclick="go('rewards')"><span>🏆</span>Rewards</button></nav>
+</div><div class="toast" id="toast"></div>
 
 <script>
-const A=[
-["A","🍎 Apple"],["B","⚽ Ball"],["C","🐱 Cat"],["D","🐶 Dog"],["E","🥚 Egg"],["F","🐟 Fish"],["G","🍇 Grapes"],["H","🏠 House"],["I","🍦 Ice Cream"],["J","🧃 Juice"],["K","🪁 Kite"],["L","🦁 Lion"],["M","🐒 Monkey"],["N","👃 Nose"],["O","🍊 Orange"],["P","🐼 Panda"],["Q","👑 Queen"],["R","🌈 Rainbow"],["S","☀️ Sun"],["T","🐯 Tiger"],["U","☂️ Umbrella"],["V","🎻 Violin"],["W","🐳 Whale"],["X","🎵 Xylophone"],["Y","🧶 Yarn"],["Z","🦓 Zebra"]
-];
+const A=[["A","🍎 Apple"],["B","⚽ Ball"],["C","🐱 Cat"],["D","🐶 Dog"],["E","🥚 Egg"],["F","🐟 Fish"],["G","🍇 Grapes"],["H","🏠 House"],["I","🍦 Ice Cream"],["J","🧃 Juice"],["K","🪁 Kite"],["L","🦁 Lion"],["M","🐒 Monkey"],["N","👃 Nose"],["O","🍊 Orange"],["P","🐼 Panda"],["Q","👑 Queen"],["R","🌈 Rainbow"],["S","☀️ Sun"],["T","🐯 Tiger"],["U","☂️ Umbrella"],["V","🎻 Violin"],["W","🐳 Whale"],["X","🎵 Xylophone"],["Y","🧶 Yarn"],["Z","🦓 Zebra"]];
 const H=[["अ","🍎 अनार"],["आ","🥭 आम"],["इ","🍋 इमली"],["ई","🦅 ईगल"],["उ","🦉 उल्लू"],["ऊ","🐪 ऊँट"],["ए","🚂 इंजन"],["ऐ","🪞 ऐनक"],["ओ","🦜 ओखली"],["औ","💊 औषधि"],["क","🐦 कबूतर"],["ख","🐰 खरगोश"],["ग","🌼 गमला"],["घ","🏠 घर"]];
-let stars=Number(localStorage.getItem("mlStars")||0), correct=Number(localStorage.getItem("mlCorrect")||0), games=Number(localStorage.getItem("mlGames")||0);
-let ai=0,hi=0,mathScore=0,qIndex=0,qScore=0;
-
-function save(){localStorage.setItem("mlStars",stars);localStorage.setItem("mlCorrect",correct);localStorage.setItem("mlGames",games);updateUI()}
-function updateUI(){
-document.getElementById("stars").textContent=stars;document.getElementById("pStars").textContent=stars;document.getElementById("pCorrect").textContent=correct;document.getElementById("pGames").textContent=games;
-let level=Math.floor(stars/100)+1;let pct=stars%100;document.getElementById("levelFill").style.width=pct+"%";document.getElementById("levelText").textContent=`Level ${level} · ${100-pct} stars to next level`;
-["bronze","silver","gold","crown"].forEach((id,i)=>document.getElementById(id).classList.toggle("locked",stars<[100,500,1000,2500][i]));
-}
-function addStars(n,msg=""){stars+=n;correct++;save();if(msg) toast(msg);if(n>=15) celebrate()}
-function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1500)}
-function celebrate(){let c=document.getElementById("confetti");c.innerHTML="";for(let i=0;i<28;i++){let s=document.createElement("i");s.style.left=Math.random()*100+"%";s.style.top="-20px";s.style.animationDelay=Math.random()*250+"ms";s.style.background=`hsl(${Math.random()*360},85%,60%)`;c.appendChild(s)}setTimeout(()=>c.innerHTML="",1100)}
-function go(id){document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.nav===id));window.scrollTo(0,0);if(id==="rewards"||id==="progress")updateUI()}
-function speak(t){if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}
-function renderPills(){
-document.getElementById("abcPills").innerHTML=A.map((x,i)=>`<button class="pill ${i===0?"active":""}" onclick="setABC(${i})">${x[0]}</button>`).join("");
-document.getElementById("hiPills").innerHTML=H.map((x,i)=>`<button class="pill ${i===0?"active":""}" onclick="setHI(${i})">${x[0]}</button>`).join("");
-}
-function setABC(i){ai=i;document.getElementById("abcLetter").textContent=A[i][0];document.getElementById("abcWord").textContent=A[i][1];document.querySelectorAll("#abcPills .pill").forEach((b,j)=>b.classList.toggle("active",i===j));document.getElementById("abcFeedback").textContent=""}
-function nextABC(){ai=(ai+1)%A.length;setABC(ai);addStars(5,"🎉 +5 Stars")}
-function speakABC(){speak(A[ai][0]+" for "+A[ai][1].replace(/[^\w ]/g,""))}
-function setHI(i){hi=i;document.getElementById("hiLetter").textContent=H[i][0];document.getElementById("hiWord").textContent=H[i][1];document.querySelectorAll("#hiPills .pill").forEach((b,j)=>b.classList.toggle("active",i===j))}
-function nextHindi(){hi=(hi+1)%H.length;setHI(hi);addStars(5,"🎉 +5 Stars")}
-function speakHindi(){speak(H[hi][0]+" से "+H[hi][1].replace(/[^\u0900-\u097F ]/g,""))}
-
-function newMath(){
-let a=Math.floor(Math.random()*10)+1,b=Math.floor(Math.random()*10)+1,ans=a+b;
-document.getElementById("mathQuestion").textContent=`${a} + ${b} = ?`;
-let opts=[ans,ans+1,Math.max(0,ans-2),ans+3].sort(()=>Math.random()-.5);
-document.getElementById("mathOptions").innerHTML=opts.map(o=>`<button class="option" onclick="mathAnswer(${o},${ans})">${o}</button>`).join("");document.getElementById("mathFeedback").textContent="";
-}
-function mathAnswer(o,a){if(o===a){mathScore+=10;addStars(10,"🎉 Correct! +10 Stars");document.getElementById("mathScore").textContent=mathScore;document.getElementById("mathFeedback").textContent="🌟 Great job!";setTimeout(newMath,650)}else document.getElementById("mathFeedback").textContent="😊 Try again!"}
-
-const Q=[
-["Which animal says 'meow'?","🐱 Cat",["🐶 Dog","🐱 Cat","🐮 Cow","🐔 Hen"]],
-["What comes after 4?","5",["3","5","7","9"]],
-["How many days are in a week?","7",["5","6","7","10"]],
-["Which one is a fruit?","🍎 Apple",["🚗 Car","🍎 Apple","🏠 House","✏️ Pencil"]],
-["What color is the sky on a clear day?","Blue",["Green","Blue","Pink","Black"]],
-["2 + 3 = ?","5",["4","5","6","8"]],
-["Which is the largest?","Elephant",["Cat","Dog","Elephant","Mouse"]]
+const QUESTIONS=[
+["mixed","🐱 Which animal says meow?","Cat",["Cat","Dog","Cow","Hen"]],
+["mixed","🌈 Which color is made by mixing red + yellow?","Orange",["Green","Orange","Purple","Blue"]],
+["mixed","🔢 What comes after 9?","10",["8","10","11","12"]],
+["mixed","🍎 Which one is a fruit?","Apple",["Car","Apple","Chair","Book"]],
+["mixed","🌍 How many days are in a week?","7",["5","6","7","8"]],
+["science","🌱 What do plants need to grow?","Water",["Water","Plastic","Glass","Shoes"]],
+["science","☀️ What gives Earth light and heat?","Sun",["Moon","Sun","Cloud","Starfish"]],
+["science","🫁 Which organ helps us breathe?","Lungs",["Heart","Lungs","Stomach","Brain"]],
+["science","💧 Water becomes ice when it gets...","Cold",["Hot","Cold","Loud","Bright"]],
+["science","🐟 Which animal lives in water?","Fish",["Fish","Tiger","Horse","Lion"]],
+["gk","🇮🇳 What is the capital of India?","New Delhi",["Mumbai","New Delhi","Kolkata","Chennai"]],
+["gk","🌏 Which is the largest ocean?","Pacific",["Indian","Pacific","Arctic","Atlantic"]],
+["gk","🚦 What color means STOP?","Red",["Green","Blue","Red","White"]],
+["gk","📅 How many months are in a year?","12",["10","11","12","13"]],
+["gk","🐘 Which is the largest land animal?","Elephant",["Elephant","Cat","Dog","Rabbit"]],
+["math","➕ 4 + 5 = ?","9",["7","8","9","10"]],
+["math","➖ 10 - 3 = ?","7",["5","6","7","8"]],
+["math","✖️ 2 × 4 = ?","8",["6","7","8","9"]],
+["math","🔢 Which number is even?","8",["5","7","8","9"]],
+["math","🍬 You have 3 candies and get 2 more. How many?","5",["4","5","6","7"]]
 ];
-function startQuiz(){qIndex=0;qScore=0;renderQuiz()}
-function renderQuiz(){let q=Q[qIndex%Q.length];document.getElementById("qNum").textContent=Math.min(qIndex+1,5);document.getElementById("qScore").textContent=qScore;document.getElementById("question").textContent=q[0];document.getElementById("quizOptions").innerHTML=q[2].map(o=>`<button class="option" onclick='quizAnswer(${JSON.stringify(o)},${JSON.stringify(q[1])})'>${o}</button>`).join("");document.getElementById("quizFeedback").textContent=""}
-function quizAnswer(o,a){if(o===a){qScore+=20;addStars(20,"🎉 Correct! +20 Stars");document.getElementById("quizFeedback").textContent="⭐ Excellent!";}else document.getElementById("quizFeedback").textContent="😊 Nice try!";setTimeout(()=>{qIndex++;if(qIndex>=5){toast(`🏆 Quiz complete! Score ${qScore}`);qIndex=0;qScore=0}renderQuiz()},700)}
+const STORIES=[
+["🐰 The Kind Rabbit","A little rabbit found a hungry bird. He shared his lunch. The bird smiled and helped him find his way home. 💛","Being kind makes everyone happier."],
+["🦁 The Brave Lion","A young lion was scared to try something new. He took one small step, then another, and discovered he could do it! 🦁","Small steps can make you brave."],
+["🐢 The Smart Tortoise","The tortoise did not rush. He planned, practiced and finished his work carefully. 🐢","Slow and steady learning is powerful."]
+];
+let stars=+localStorage.getItem("mlStars3")||0,correct=+localStorage.getItem("mlCorrect3")||0,games=+localStorage.getItem("mlGames3")||0;
+let ai=0,hi=0,mathMode="add",mathStars=0,quizCat="mixed",quizNo=0,quizScore=0,busy=false;
 
-let mem=[];
-function startMemory(){games++;save();let vals=["🍎","🍎","🐱","🐱","🚗","🚗","⭐","⭐"].sort(()=>Math.random()-.5);mem=vals.map((v,i)=>({v,open:false,done:false}));document.getElementById("gameArea").innerHTML=`<div class="panel"><h3 style="margin-bottom:12px">🧩 Match the pairs</h3><div class="memory">${mem.map((_,i)=>`<button id="m${i}" onclick="flip(${i})">❓</button>`).join("")}</div><div class="feedback" id="memMsg"></div></div>`}
-let first=-1,busy=false;
-function flip(i){if(busy||mem[i].open||mem[i].done)return;mem[i].open=true;document.getElementById("m"+i).textContent=mem[i].v;document.getElementById("m"+i).classList.add("open");if(first<0){first=i;return}busy=true;if(mem[first].v===mem[i].v){mem[first].done=mem[i].done=true;addStars(15,"🎉 Pair found! +15");first=-1;busy=false;if(mem.every(x=>x.done))document.getElementById("memMsg").textContent="🏆 You found all pairs!"}else{setTimeout(()=>{[first,i].forEach(j=>{mem[j].open=false;document.getElementById("m"+j).textContent="❓";document.getElementById("m"+j).classList.remove("open")});first=-1;busy=false},650)}}
-function startNumberGame(){games++;save();let target=Math.floor(Math.random()*9)+1,opts=[target];while(opts.length<4){let n=Math.floor(Math.random()*9)+1;if(!opts.includes(n))opts.push(n)}opts.sort(()=>Math.random()-.5);document.getElementById("gameArea").innerHTML=`<div class="panel" style="text-align:center"><h3>🔢 Find number ${target}</h3><div class="game-grid" style="margin-top:15px">${opts.map(n=>`<button class="game-card" onclick="numberAnswer(${n},${target})"><div>${n}</div></button>`).join("")}</div><div class="feedback" id="numMsg"></div></div>`}
-function numberAnswer(n,t){if(n===t){addStars(15,"🎉 Found it! +15");document.getElementById("numMsg").textContent="🌟 Correct!"}else document.getElementById("numMsg").textContent="😊 Try again!"}
-function startColorGame(){games++;save();let colors=[["RED","#ff4f70"],["BLUE","#4b83ff"],["GREEN","#2bb673"],["YELLOW","#ffc83d"]],target=colors[Math.floor(Math.random()*4)];document.getElementById("gameArea").innerHTML=`<div class="panel"><h3>🎨 Tap ${target[0]}</h3><div class="color-box" style="background:${target[1]}">${target[0]}</div><div class="color-options">${colors.map(c=>`<button style="background:${c[1]}" onclick="colorAnswer('${c[0]}','${target[0]}')"></button>`).join("")}</div><div class="feedback" id="colorMsg"></div></div>`}
-function colorAnswer(c,t){if(c===t){addStars(15,"🎉 Perfect color! +15");document.getElementById("colorMsg").textContent="🌈 Correct!"}else document.getElementById("colorMsg").textContent="😊 Try again!"}
+function save(){localStorage.setItem("mlStars3",stars);localStorage.setItem("mlCorrect3",correct);localStorage.setItem("mlGames3",games);ui()}
+function ui(){starsEl("stars",stars);starsEl("ps",stars);starsEl("pc",correct);starsEl("pg",games);let l=Math.floor(stars/100)+1,p=stars%100;document.getElementById("fill").style.width=p+"%";document.getElementById("lvl").textContent="Level "+l;document.getElementById("lt").textContent=(100-p)+" stars to next level";[[100,"r1"],[500,"r2"],[1000,"r3"],[2500,"r4"]].forEach(x=>document.getElementById(x[1]).classList.toggle("locked",stars<x[0]))}
+function starsEl(id,v){document.getElementById(id).textContent=v}
+function add(n,msg){stars+=n;correct++;save();toast(msg||`⭐ +${n} Stars`)}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove("show"),1400)}
+function go(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".bottom button").forEach(b=>b.classList.toggle("active",b.dataset.n===id));scrollTo(0,0);if(id==="quiz"&&quizNo===0)renderQuiz();if(id==="stories")renderStories();if(id==="progress"||id==="rewards")ui()}
+function speak(t){if("speechSynthesis"in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(t))}}
+function renderABC(){document.getElementById("abcL").textContent=A[ai][0];document.getElementById("abcW").textContent=A[ai][1];document.getElementById("abcP").innerHTML=A.map((x,i)=>`<button class="pill ${i===ai?"active":""}" onclick="setABC(${i})">${x[0]}</button>`).join("")}
+function setABC(i){ai=i;renderABC();document.getElementById("abcF").textContent=""}
+function nextABC(){ai=(ai+1)%A.length;renderABC();add(5,"🎉 +5 Stars")}
+function speakABC(){speak(A[ai][0]+" for "+A[ai][1].replace(/[^\w ]/g,""))}
+function renderHI(){document.getElementById("hiL").textContent=H[hi][0];document.getElementById("hiW").textContent=H[hi][1];document.getElementById("hiP").innerHTML=H.map((x,i)=>`<button class="pill ${i===hi?"active":""}" onclick="setHI(${i})">${x[0]}</button>`).join("")}
+function setHI(i){hi=i;renderHI()}
+function nextHI(){hi=(hi+1)%H.length;renderHI();add(5,"🎉 +5 Stars")}
+function speakHI(){speak(H[hi][0]+" से "+H[hi][1].replace(/[^\u0900-\u097F ]/g,""))}
 
-renderPills();updateUI();newMath();startQuiz();
+function newMath(){let a=Math.floor(Math.random()*15)+1,b=Math.floor(Math.random()*15)+1;if(mathMode==="sub"&&b>a)[a,b]=[b,a];let ans=mathMode==="add"?a+b:a-b;document.getElementById("mq").textContent=`${a} ${mathMode==="add"?"+":"−"} ${b} = ?`;let opts=[ans,ans+1,Math.max(0,ans-1),ans+2].sort(()=>Math.random()-.5);document.getElementById("mo").innerHTML=opts.map(x=>`<button class="option" onclick="mathAns(${x},${ans})">${x}</button>`).join("");document.getElementById("mf").textContent=""}
+function mathAns(x,a){if(x===a){mathStars+=10;document.getElementById("ms").textContent=mathStars;add(10,"🌟 Correct! +10");setTimeout(newMath,450)}else document.getElementById("mf").textContent="😊 Try again!"}
+
+function resetQuiz(){quizNo=0;quizScore=0;renderQuiz()}
+function renderQuiz(){let pool=QUESTIONS.filter(q=>quizCat==="mixed"||q[0]===quizCat);let q=pool[quizNo%pool.length];document.getElementById("qn").textContent=Math.min(quizNo+1,10);document.getElementById("qs").textContent=quizScore;document.getElementById("qq").textContent=q[1];document.getElementById("qo").innerHTML=q[3].sort(()=>Math.random()-.5).map(o=>`<button class="option" onclick='quizAns(${JSON.stringify(o)},${JSON.stringify(q[2])})'>${o}</button>`).join("");document.getElementById("qf").textContent=""}
+function quizAns(o,a){if(o===a){quizScore+=10;add(10,"🎉 Correct! +10");document.getElementById("qf").textContent="⭐ Excellent!";}else document.getElementById("qf").textContent="😊 Nice try!";setTimeout(()=>{quizNo++;if(quizNo>=10){toast(`🏆 Quiz complete: ${quizScore}/100`);quizNo=0;quizScore=0}renderQuiz()},500)}
+
+function memory(){games++;save();let vals=["🍎","🍎","🐱","🐱","🚗","🚗","⭐","⭐","🐸","🐸","🍕","🍕"].sort(()=>Math.random()-.5);window.mm=vals.map(v=>({v,o:false,d:false}));window.first=-1;document.getElementById("gameArea").innerHTML=`<div class="panel"><h3>🧩 Find all matching pairs</h3><div class="memory">${vals.map((_,i)=>`<button id="m${i}" onclick="flip(${i})">❓</button>`).join("")}</div><div class="feedback" id="gm"></div></div>`}
+function flip(i){if(busy||mm[i].o||mm[i].d)return;mm[i].o=true;let b=document.getElementById("m"+i);b.textContent=mm[i].v;b.classList.add("open");if(first<0){first=i;return}busy=true;if(mm[first].v===mm[i].v){mm[first].d=mm[i].d=true;add(15,"🧩 Pair found! +15");first=-1;busy=false;if(mm.every(x=>x.d))document.getElementById("gm").textContent="🏆 All pairs complete!"}else setTimeout(()=>{[first,i].forEach(j=>{mm[j].o=false;let z=document.getElementById("m"+j);z.textContent="❓";z.classList.remove("open")});first=-1;busy=false},650)}
+
+function numberHunt(){games++;save();let target=Math.floor(Math.random()*20)+1,arr=[target];while(arr.length<6){let n=Math.floor(Math.random()*20)+1;if(!arr.includes(n))arr.push(n)}arr.sort(()=>Math.random()-.5);document.getElementById("gameArea").innerHTML=`<div class="panel" style="text-align:center"><h3>🔢 Find number <b>${target}</b></h3><div class="gamegrid" style="margin-top:12px">${arr.map(n=>`<button class="game" onclick="numAns(${n},${target})"><span>${n}</span></button>`).join("")}</div><div class="feedback" id="gm"></div></div>`}
+function numAns(n,t){if(n===t){add(15,"🎉 Found it! +15");document.getElementById("gm").textContent="🌟 Correct!"}else document.getElementById("gm").textContent="😊 Try again!"}
+function colorGame(){games++;save();let C=[["RED","#ff536d"],["BLUE","#4d83ff"],["GREEN","#2db673"],["YELLOW","#f7c83b"],["PURPLE","#8a62e8"],["ORANGE","#ff9a3d"]],t=C[Math.floor(Math.random()*C.length)];document.getElementById("gameArea").innerHTML=`<div class="panel"><h3>🎨 Tap the <b>${t[0]}</b> color</h3><div class="colorgrid" style="margin-top:12px">${C.map(c=>`<button style="background:${c[1]}" onclick="colAns('${c[0]}','${t[0]}')"></button>`).join("")}</div><div class="feedback" id="gm"></div></div>`}
+function colAns(a,t){if(a===t){add(15,"🌈 Perfect! +15");document.getElementById("gm").textContent="🎨 Correct!"}else document.getElementById("gm").textContent="😊 Try again!"}
+function oddGame(){games++;save();let sets=[["🐶","🐶","🐶","🐱"],["🍎","🍎","🍌","🍎"],["⭐","⭐","🌙","⭐"],["🚗","🚗","🚲","🚗"]],s=sets[Math.floor(Math.random()*sets.length)],odd=s.find((x,i)=>s.indexOf(x)===i&&s.filter(y=>y===x).length===1);document.getElementById("gameArea").innerHTML=`<div class="panel" style="text-align:center"><h3>🕵️ Find the odd one!</h3><div class="gamegrid" style="margin-top:12px">${s.map((x,i)=>`<button class="game" onclick="oddAns('${x}','${odd}')"><span>${x}</span></button>`).join("")}</div><div class="feedback" id="gm"></div></div>`}
+function oddAns(a,o){if(a===o){add(20,"🕵️ Great! +20");document.getElementById("gm").textContent="🏆 You found it!"}else document.getElementById("gm").textContent="😊 Look carefully!"}
+function renderStories(){document.getElementById("storyList").innerHTML=STORIES.map((s,i)=>`<div class="panel"><h3>${s[0]}</h3><p style="line-height:1.6;margin-top:9px">${s[1]}</p><p style="margin-top:10px"><b>💡 Lesson:</b> ${s[2]}</p><button class="primary" onclick="speak(${JSON.stringify(s[1])})">🔊 सुनो</button></div>`).join("")}
+
+renderABC();renderHI();newMath();resetQuiz();renderStories();ui();
 </script>
 </body>
 </html>
